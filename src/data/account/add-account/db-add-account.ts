@@ -5,5 +5,7 @@ export class DbAddAccount implements AddAccount {
   constructor(private readonly hasher: Hasher) {
     this.hasher = hasher;
   }
-  async add(data: AddAccount.Params): Promise<void> {}
+  async add(data: AddAccount.Params): Promise<void> {
+    const hashedPassword = await this.hasher.hash(data.password);
+  }
 }
