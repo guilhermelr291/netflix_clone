@@ -5,6 +5,7 @@ import { AddAccount } from '../../../domain/use-cases/add-account';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
 import { AccountModel } from '../../../domain/use-cases/models/account';
 import { UnprocessableEntityError } from '../../../shared/errors';
+import { AddAccountRepository } from '../../protocols/add-account-repository';
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -26,11 +27,19 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
   return new LoadAccountByEmailRepositoryStub();
 };
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add(data: AddAccount.Params): Promise<void> {}
+  }
+
+  return new AddAccountRepositoryStub();
+};
 
 type SutTypes = {
   sut: DbAddAccount;
   hasherStub: Hasher;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
+  addAccountRepositoryStub: AddAccountRepository;
 };
 
 const mockAddAccountParams = (): AddAccount.Params => ({
@@ -49,10 +58,20 @@ const mockAccount = (): AccountModel => ({
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher();
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+  const addAccountRepositoryStub = makeAddAccountRepository();
 
-  const sut = new DbAddAccount(hasherStub, loadAccountByEmailRepositoryStub);
+  const sut = new DbAddAccount(
+    hasherStub,
+    loadAccountByEmailRepositoryStub,
+    addAccountRepositoryStub
+  );
 
-  return { sut, hasherStub, loadAccountByEmailRepositoryStub };
+  return {
+    sut,
+    hasherStub,
+    loadAccountByEmailRepositoryStub,
+    addAccountRepositoryStub,
+  };
 };
 
 describe('add()', () => {
@@ -90,5 +109,23 @@ describe('add()', () => {
     expect(sut.add(mockAddAccountParams())).rejects.toThrow(
       UnprocessableEntityError
     );
+  });
+
+  test('ensure DbAddAccount calls AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+
+    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
+
+    const data = mockAddAccountParams();
+
+    const { name, email } = data;
+
+    await sut.add(data);
+
+    expect(addSpy).toHaveBeenCalledWith({
+      name,
+      email,
+      password: 'hashed_value',
+    });
   });
 });
