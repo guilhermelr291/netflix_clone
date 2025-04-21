@@ -75,7 +75,7 @@ const makeSut = (): SutTypes => {
 };
 
 describe('add()', () => {
-  test('ensure DbAddAccount calls Hasher with correct value', async () => {
+  test('should call Hasher with correct value', async () => {
     const { sut, hasherStub } = makeSut();
 
     const hashSpy = vi.spyOn(hasherStub, 'hash');
@@ -85,7 +85,7 @@ describe('add()', () => {
 
     expect(hashSpy).toHaveBeenCalledWith(data.password);
   });
-  test('ensure DbAddAccount calls LoadAccountByEmailRepository with correct value', async () => {
+  test('should call LoadAccountByEmailRepository with correct value', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     const loadByEmailSpy = vi.spyOn(
@@ -98,7 +98,7 @@ describe('add()', () => {
 
     expect(loadByEmailSpy).toHaveBeenCalledWith(data.email);
   });
-  test('ensure DbAddAccount throws UnprocessableEntityError if there is an account with provided email', async () => {
+  test('should throw UnprocessableEntityError if there is an account with provided email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     vi.spyOn(
@@ -111,7 +111,24 @@ describe('add()', () => {
     );
   });
 
-  test('ensure DbAddAccount calls AddAccountRepository with correct values', async () => {
+  test('should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+
+    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
+
+    const data = mockAddAccountParams();
+
+    const { name, email } = data;
+
+    await sut.add(data);
+
+    expect(addSpy).toHaveBeenCalledWith({
+      name,
+      email,
+      password: 'hashed_value',
+    });
+  });
+  test('should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut();
 
     const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
