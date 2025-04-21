@@ -128,13 +128,22 @@ describe('add()', () => {
       password: 'hashed_value',
     });
   });
-  test('should throw if loadAccountByEmailRepository throws', async () => {
+  test('should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     vi.spyOn(
       loadAccountByEmailRepositoryStub,
       'loadByEmail'
     ).mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+  });
+  test('should throw if Hasher throws', async () => {
+    const { sut, hasherStub } = makeSut();
+
+    vi.spyOn(hasherStub, 'hash').mockImplementationOnce(() => {
       throw new Error();
     });
 
