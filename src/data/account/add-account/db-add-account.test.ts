@@ -149,4 +149,13 @@ describe('add()', () => {
 
     expect(sut.add(mockAddAccountParams())).rejects.toThrow();
   });
+  test('should throw if AddAccountRepository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut();
+
+    vi.spyOn(addAccountRepositoryStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+  });
 });
