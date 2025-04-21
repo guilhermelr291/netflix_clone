@@ -74,88 +74,90 @@ const makeSut = (): SutTypes => {
   };
 };
 
-describe('add()', () => {
-  test('should call Hasher with correct value', async () => {
-    const { sut, hasherStub } = makeSut();
+describe('DbAddAccount', () => {
+  describe('add()', () => {
+    test('should call Hasher with correct value', async () => {
+      const { sut, hasherStub } = makeSut();
 
-    const hashSpy = vi.spyOn(hasherStub, 'hash');
+      const hashSpy = vi.spyOn(hasherStub, 'hash');
 
-    const data = mockAddAccountParams();
-    await sut.add(data);
+      const data = mockAddAccountParams();
+      await sut.add(data);
 
-    expect(hashSpy).toHaveBeenCalledWith(data.password);
-  });
-  test('should call LoadAccountByEmailRepository with correct value', async () => {
-    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-
-    const loadByEmailSpy = vi.spyOn(
-      loadAccountByEmailRepositoryStub,
-      'loadByEmail'
-    );
-
-    const data = mockAddAccountParams();
-    await sut.add(data);
-
-    expect(loadByEmailSpy).toHaveBeenCalledWith(data.email);
-  });
-  test('should throw UnprocessableEntityError if there is an account with provided email', async () => {
-    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-
-    vi.spyOn(
-      loadAccountByEmailRepositoryStub,
-      'loadByEmail'
-    ).mockResolvedValueOnce(mockAccount());
-
-    expect(sut.add(mockAddAccountParams())).rejects.toThrow(
-      UnprocessableEntityError
-    );
-  });
-
-  test('should call AddAccountRepository with correct values', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
-
-    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
-
-    const data = mockAddAccountParams();
-
-    const { name, email } = data;
-
-    await sut.add(data);
-
-    expect(addSpy).toHaveBeenCalledWith({
-      name,
-      email,
-      password: 'hashed_value',
+      expect(hashSpy).toHaveBeenCalledWith(data.password);
     });
-  });
-  test('should throw if LoadAccountByEmailRepository throws', async () => {
-    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    test('should call LoadAccountByEmailRepository with correct value', async () => {
+      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
-    vi.spyOn(
-      loadAccountByEmailRepositoryStub,
-      'loadByEmail'
-    ).mockImplementationOnce(() => {
-      throw new Error();
+      const loadByEmailSpy = vi.spyOn(
+        loadAccountByEmailRepositoryStub,
+        'loadByEmail'
+      );
+
+      const data = mockAddAccountParams();
+      await sut.add(data);
+
+      expect(loadByEmailSpy).toHaveBeenCalledWith(data.email);
+    });
+    test('should throw UnprocessableEntityError if there is an account with provided email', async () => {
+      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+
+      vi.spyOn(
+        loadAccountByEmailRepositoryStub,
+        'loadByEmail'
+      ).mockResolvedValueOnce(mockAccount());
+
+      expect(sut.add(mockAddAccountParams())).rejects.toThrow(
+        UnprocessableEntityError
+      );
     });
 
-    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
-  });
-  test('should throw if Hasher throws', async () => {
-    const { sut, hasherStub } = makeSut();
+    test('should call AddAccountRepository with correct values', async () => {
+      const { sut, addAccountRepositoryStub } = makeSut();
 
-    vi.spyOn(hasherStub, 'hash').mockImplementationOnce(() => {
-      throw new Error();
+      const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
+
+      const data = mockAddAccountParams();
+
+      const { name, email } = data;
+
+      await sut.add(data);
+
+      expect(addSpy).toHaveBeenCalledWith({
+        name,
+        email,
+        password: 'hashed_value',
+      });
     });
+    test('should throw if LoadAccountByEmailRepository throws', async () => {
+      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
-    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
-  });
-  test('should throw if AddAccountRepository throws', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
+      vi.spyOn(
+        loadAccountByEmailRepositoryStub,
+        'loadByEmail'
+      ).mockImplementationOnce(() => {
+        throw new Error();
+      });
 
-    vi.spyOn(addAccountRepositoryStub, 'add').mockImplementationOnce(() => {
-      throw new Error();
+      expect(sut.add(mockAddAccountParams())).rejects.toThrow();
     });
+    test('should throw if Hasher throws', async () => {
+      const { sut, hasherStub } = makeSut();
 
-    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+      vi.spyOn(hasherStub, 'hash').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+    });
+    test('should throw if AddAccountRepository throws', async () => {
+      const { sut, addAccountRepositoryStub } = makeSut();
+
+      vi.spyOn(addAccountRepositoryStub, 'add').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+    });
   });
 });
