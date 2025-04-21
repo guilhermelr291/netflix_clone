@@ -68,5 +68,14 @@ describe('AccountRepository', () => {
         where: { email },
       });
     });
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.user.findUnique).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.loadByEmail(mockAddAccountParams().email)).rejects.toThrow();
+    });
   });
 });
