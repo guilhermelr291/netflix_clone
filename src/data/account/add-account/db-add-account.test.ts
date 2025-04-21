@@ -4,6 +4,7 @@ import { DbAddAccount } from './db-add-account';
 import { AddAccount } from '../../../domain/use-cases/add-account';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
 import { AccountModel } from '../../../domain/use-cases/models/account';
+import { UnprocessableEntityError } from '../../../shared/errors';
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -18,8 +19,8 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub
     implements LoadAccountByEmailRepository
   {
-    loadByEmail(email: string): Promise<AccountModel> {
-      return new Promise(resolve => resolve(mockAccount()));
+    loadByEmail(email: string): Promise<AccountModel | null> {
+      return new Promise(resolve => resolve(null));
     }
   }
 
@@ -77,5 +78,17 @@ describe('add()', () => {
     await sut.add(data);
 
     expect(loadByEmailSpy).toHaveBeenCalledWith(data.email);
+  });
+  test('ensure DbAddAccount throws UnprocessableEntityError if there is an account with provided email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockResolvedValueOnce(mockAccount());
+
+    expect(sut.add(mockAddAccountParams())).rejects.toThrow(
+      UnprocessableEntityError
+    );
   });
 });
