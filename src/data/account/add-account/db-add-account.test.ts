@@ -128,21 +128,16 @@ describe('add()', () => {
       password: 'hashed_value',
     });
   });
-  test('should call AddAccountRepository with correct values', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
+  test('should throw if loadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
-    const addSpy = vi.spyOn(addAccountRepositoryStub, 'add');
-
-    const data = mockAddAccountParams();
-
-    const { name, email } = data;
-
-    await sut.add(data);
-
-    expect(addSpy).toHaveBeenCalledWith({
-      name,
-      email,
-      password: 'hashed_value',
+    vi.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    ).mockImplementationOnce(() => {
+      throw new Error();
     });
+
+    expect(sut.add(mockAddAccountParams())).rejects.toThrow();
   });
 });
