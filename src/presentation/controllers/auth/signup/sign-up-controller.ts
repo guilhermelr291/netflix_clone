@@ -2,6 +2,7 @@ import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
 import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
+import { badRequestError } from '../../../../shared/errors';
 
 export class SignUpController implements Controller {
   constructor(
@@ -12,13 +13,17 @@ export class SignUpController implements Controller {
     this.fieldComparer = fieldComparer;
   }
 
-  handle(request: SignUpController.Params): Promise<HttpResponse> {
+  async handle(request: SignUpController.Params): Promise<HttpResponse> {
     try {
-      const result = this.fieldComparer.compare(request);
+      const isEqual = this.fieldComparer.compare(request);
+      if (!isEqual)
+        throw new badRequestError(
+          `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
+        );
 
       return new Promise(resolve => resolve({ status: 200 }));
     } catch (error) {
-      console.log('Error in signUp: ', error);
+      console.log('Error on signUp: ', error);
       throw error;
     }
   }
