@@ -26,5 +26,13 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.hash).toHaveBeenCalledWith(value, 'any_salt');
     });
+    test('should call bcrypt.genSalt with correct value', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+
+      await sut.hash(value);
+
+      expect(bcrypt.genSalt).toHaveBeenCalledWith(SALT);
+    });
   });
 });
