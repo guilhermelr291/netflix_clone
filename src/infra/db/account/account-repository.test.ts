@@ -33,5 +33,14 @@ describe('AccountRepository', () => {
 
       expect(prisma.user.create).toHaveBeenCalledWith({ data });
     });
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.user.create).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+    });
   });
 });
