@@ -2,6 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { SignUpController } from './sign-up-controller';
 import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
+import { badRequestError } from '../../../../shared/errors';
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -13,6 +14,8 @@ const makeAddAccount = (): AddAccount => {
 
 const makeFieldComparer = (): FieldComparer => {
   class FieldComparerStub implements FieldComparer {
+    field: string = 'any_field';
+    fieldToCompare: string = 'another_field';
     compare(data: any): boolean {
       return true;
     }
@@ -52,5 +55,14 @@ describe('SignUpController', () => {
     await sut.handle(request);
 
     expect(compareSpy).toHaveBeenCalledWith(request);
+  });
+  test('should throw BadRequestError if FieldComparer returns false', async () => {
+    const { sut, fieldComparerStub } = makeSut();
+
+    vi.spyOn(fieldComparerStub, 'compare').mockReturnValueOnce(false);
+
+    await expect(sut.handle(mockRequestParams())).rejects.toThrow(
+      badRequestError
+    );
   });
 });
