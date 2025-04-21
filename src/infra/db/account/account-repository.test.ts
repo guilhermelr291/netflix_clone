@@ -2,16 +2,30 @@ import { vi, describe, test, expect } from 'vitest';
 import { AccountRepository } from './account-repository';
 import { AddAccount } from '../../../domain/use-cases/add-account';
 import prisma from '../../../../prisma/db';
+import { AccountModel } from '../../../domain/use-cases/models/account';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
     user: {
       create: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue({
+        id: 1,
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      }),
     },
   },
 }));
 
 const mockAddAccountParams = (): AddAccount.Params => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password',
+});
+
+const mockAccount = (): AccountModel => ({
+  id: 1,
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
@@ -41,6 +55,18 @@ describe('AccountRepository', () => {
       });
 
       expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+    });
+  });
+  describe('loadByEmail()', () => {
+    test('should call prisma with correct data', async () => {
+      const sut = makeSut();
+
+      const { email } = mockAddAccountParams();
+      await sut.loadByEmail(email);
+
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { email },
+      });
     });
   });
 });
