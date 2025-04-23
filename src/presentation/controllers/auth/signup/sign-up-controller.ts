@@ -10,11 +10,7 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount,
     private readonly fieldComparer: FieldComparer,
     private readonly emailValidator: EmailValidator
-  ) {
-    this.addAccount = addAccount;
-    this.fieldComparer = fieldComparer;
-    this.emailValidator = emailValidator;
-  }
+  ) {}
 
   async handle(request: SignUpController.Params): Promise<HttpResponse> {
     try {
@@ -24,9 +20,13 @@ export class SignUpController implements Controller {
           `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
         );
 
-      const isValidEmail = this.emailValidator.isValid(request.email);
+      const isValidEmail = this.emailValidator.isValid(request.email); //TODO: fazer um composite para essas validações.
       if (!isValidEmail)
         throw new badRequestError('Please, provide a valid email');
+
+      const { name, email, password } = request;
+
+      await this.addAccount.add({ name, email, password });
 
       return new Promise(resolve => resolve({ status: 200 }));
     } catch (error) {
