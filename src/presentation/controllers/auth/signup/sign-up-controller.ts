@@ -3,14 +3,17 @@ import { HttpResponse } from '../../../protocols/http';
 import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
+import { EmailValidator } from '../../../../domain/protocols/email-validator';
 
 export class SignUpController implements Controller {
   constructor(
     private readonly addAccount: AddAccount,
-    private readonly fieldComparer: FieldComparer
+    private readonly fieldComparer: FieldComparer,
+    private readonly emailValidator: EmailValidator
   ) {
     this.addAccount = addAccount;
     this.fieldComparer = fieldComparer;
+    this.emailValidator = emailValidator;
   }
 
   async handle(request: SignUpController.Params): Promise<HttpResponse> {
@@ -20,6 +23,8 @@ export class SignUpController implements Controller {
         throw new badRequestError(
           `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
         );
+
+      const isValidEmail = this.emailValidator.isValid(request.email);
 
       return new Promise(resolve => resolve({ status: 200 }));
     } catch (error) {
