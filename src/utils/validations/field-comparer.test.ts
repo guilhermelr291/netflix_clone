@@ -14,4 +14,12 @@ describe('FieldComparerImpl', () => {
 
     expect(result).toBe(true);
   });
+  test('should return false if fields are different', () => {
+    const data = { field: 'value', fieldToCompare: 'another_value' };
+    const sut = makeSut();
+
+    const result = sut.compare(data);
+
+    expect(result).toBe(false);
+  });
 });
