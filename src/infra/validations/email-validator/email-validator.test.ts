@@ -13,4 +13,12 @@ describe('EmailValidatorImpl', () => {
 
     expect(result).toBe(true);
   });
+  test('Should return false is provided value is not an email', () => {
+    const sut = makeSut();
+    const validEmail = 'invalid_email.mail.com';
+
+    const result = sut.isValid(validEmail);
+
+    expect(result).toBe(false);
+  });
 });
