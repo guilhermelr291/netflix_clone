@@ -25,6 +25,8 @@ export class SignUpController implements Controller {
         );
 
       const isValidEmail = this.emailValidator.isValid(request.email);
+      if (!isValidEmail)
+        throw new badRequestError('Please, provide a valid email');
 
       return new Promise(resolve => resolve({ status: 200 }));
     } catch (error) {

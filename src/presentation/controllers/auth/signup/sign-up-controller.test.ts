@@ -93,4 +93,13 @@ describe('SignUpController', () => {
 
     expect(compareSpy).toHaveBeenCalledWith(request.email);
   });
+  test('should throw BadRequestError if EmailValidator returns false', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+
+    vi.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+
+    await expect(sut.handle(mockRequestParams())).rejects.toThrow(
+      badRequestError
+    );
+  });
 });
