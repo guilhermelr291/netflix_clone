@@ -85,13 +85,13 @@ describe('SignUpController', () => {
   test('should call EmailValidator with correct values', async () => {
     const { sut, emailValidatorStub } = makeSut();
 
-    const compareSpy = vi.spyOn(emailValidatorStub, 'isValid');
+    const isValidSpy = vi.spyOn(emailValidatorStub, 'isValid');
 
     const request = mockRequestParams();
 
     await sut.handle(request);
 
-    expect(compareSpy).toHaveBeenCalledWith(request.email);
+    expect(isValidSpy).toHaveBeenCalledWith(request.email);
   });
   test('should throw BadRequestError if EmailValidator returns false', async () => {
     const { sut, emailValidatorStub } = makeSut();
@@ -101,5 +101,19 @@ describe('SignUpController', () => {
     await expect(sut.handle(mockRequestParams())).rejects.toThrow(
       badRequestError
     );
+  });
+
+  test('should call AddAccount with correct values', async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    const addSpy = vi.spyOn(addAccountStub, 'add');
+
+    const request = mockRequestParams();
+
+    await sut.handle(request);
+
+    const { name, email, password } = request;
+
+    expect(addSpy).toHaveBeenCalledWith({ name, email, password });
   });
 });
