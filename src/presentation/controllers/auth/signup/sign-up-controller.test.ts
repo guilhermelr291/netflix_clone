@@ -116,4 +116,14 @@ describe('SignUpController', () => {
 
     expect(addSpy).toHaveBeenCalledWith({ name, email, password });
   });
+
+  test('should throw if AddAccount throws', async () => {
+    const { sut, addAccountStub } = makeSut();
+
+    vi.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.handle(mockRequestParams())).rejects.toThrow();
+  });
 });
