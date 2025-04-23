@@ -3,6 +3,7 @@ import { SignUpController } from './sign-up-controller';
 import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
+import { EmailValidator } from '../../../../domain/protocols/email-validator';
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -23,18 +24,33 @@ const makeFieldComparer = (): FieldComparer => {
 
   return new FieldComparerStub();
 };
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      return true;
+    }
+  }
+
+  return new EmailValidatorStub();
+};
 
 type SutTypes = {
   sut: SignUpController;
   addAccountStub: AddAccount;
   fieldComparerStub: FieldComparer;
+  emailValidatorStub: EmailValidator;
 };
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
   const fieldComparerStub = makeFieldComparer();
-  const sut = new SignUpController(addAccountStub, fieldComparerStub);
+  const emailValidatorStub = makeEmailValidator();
+  const sut = new SignUpController(
+    addAccountStub,
+    fieldComparerStub,
+    emailValidatorStub
+  );
 
-  return { sut, addAccountStub, fieldComparerStub };
+  return { sut, addAccountStub, fieldComparerStub, emailValidatorStub };
 };
 
 const mockRequestParams = () => ({
@@ -64,5 +80,17 @@ describe('SignUpController', () => {
     await expect(sut.handle(mockRequestParams())).rejects.toThrow(
       badRequestError
     );
+  });
+
+  test('should call EmailValidator with correct values', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+
+    const compareSpy = vi.spyOn(emailValidatorStub, 'isValid');
+
+    const request = mockRequestParams();
+
+    await sut.handle(request);
+
+    expect(compareSpy).toHaveBeenCalledWith(request.email);
   });
 });
