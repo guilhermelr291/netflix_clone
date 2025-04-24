@@ -4,6 +4,7 @@ import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
 import { EmailValidator } from '../../../../domain/protocols/email-validator';
+import { created } from '../../../helpers/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
@@ -20,15 +21,16 @@ export class SignUpController implements Controller {
           `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
         );
 
-      const isValidEmail = this.emailValidator.isValid(request.email); //TODO: fazer um composite para essas validações.
+      const isValidEmail = this.emailValidator.isValid(request.email); //TODO: remover essa validação e usa middleware com zod para validar os campos.
       if (!isValidEmail)
+        //TODO: configurar lint de commits
         throw new badRequestError('Please, provide a valid email');
 
       const { name, email, password } = request;
 
       await this.addAccount.add({ name, email, password });
 
-      return new Promise(resolve => resolve({ status: 200 }));
+      return created({ message: 'Account created successfully!' });
     } catch (error) {
       console.log('Error on signUp: ', error);
       throw error;
