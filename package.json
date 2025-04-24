@@ -8,7 +8,7 @@
     "test:watch": "vitest --silent",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
-    "start": "ts-node-dev --respawn --transpile-only src/main/server.ts"
+    "start": "docker compose up -d && ts-node-dev --respawn --transpile-only src/main/server.ts"
   },
   "keywords": [],
   "author": "",

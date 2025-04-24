@@ -14,7 +14,7 @@ const addAccount = new DbAddAccount(
   accountRepository,
   accountRepository
 );
-const fieldComparer = new FieldComparerImpl('password', 'passwordConfirmation');
+const fieldComparer = new FieldComparerImpl('password', 'passwordConfirmation'); //TODO: criar factory e validar com zod com adapter do middleware
 const emailValidator = new EmailValidatorImpl();
 const signUpController = new SignUpController(
   addAccount,
