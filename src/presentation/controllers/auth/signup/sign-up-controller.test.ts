@@ -4,6 +4,7 @@ import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
 import { EmailValidator } from '../../../../domain/protocols/email-validator';
+import { created } from '../../../helpers/http-helper';
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -125,5 +126,14 @@ describe('SignUpController', () => {
     });
 
     await expect(sut.handle(mockRequestParams())).rejects.toThrow();
+  });
+  test('should return status 201 and success message on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockRequestParams());
+
+    expect(result).toEqual(
+      created({ message: 'Account created successfully!' })
+    );
   });
 });
