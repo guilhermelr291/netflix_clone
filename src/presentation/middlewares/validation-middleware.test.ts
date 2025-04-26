@@ -43,9 +43,7 @@ describe('ValidateData', () => {
       error,
     });
 
-    await expect(
-      sut.handle({ bodyContent: mockValidData() })
-    ).rejects.toThrowError(
+    expect(sut.handle({ bodyContent: mockValidData() })).rejects.toThrowError(
       new UnprocessableEntityError(
         error.errors.map(error => ({
           path: error.path,
@@ -53,5 +51,14 @@ describe('ValidateData', () => {
         }))
       )
     );
+  });
+  test('Should throw if zod throws', async () => {
+    const sut = makeSut();
+
+    vi.spyOn(schema, 'safeParseAsync').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.handle({ bodyContent: mockValidData() })).rejects.toThrow();
   });
 });
