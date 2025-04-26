@@ -1,14 +1,15 @@
 import { describe, expect, test, vi } from 'vitest';
 import { ValidateData } from './validation-middleware';
-import { z } from 'zod';
+import { Schema, ZodError } from 'zod';
 import { ok } from '../helpers/http-helper';
+import { UnprocessableEntityError } from '../../shared/errors';
 
 const schema = {
   safeParseAsync: vi.fn().mockResolvedValue({
     success: true,
     data: 'validated data',
   }),
-} as unknown as z.Schema;
+} as unknown as Schema;
 
 const makeSut = (): ValidateData => new ValidateData(schema);
 
@@ -32,5 +33,25 @@ describe('ValidateData', () => {
     await sut.handle({ bodyContent: mockValidData() });
 
     expect(safeParseAsyncSpy).toHaveBeenCalledWith(mockValidData());
+  });
+  test('Should throw UnprocessableEntityError is safeParseAsync validation fails', async () => {
+    const sut = makeSut();
+
+    const error = new ZodError([]);
+    vi.spyOn(schema, 'safeParseAsync').mockResolvedValueOnce({
+      success: false,
+      error,
+    });
+
+    await expect(
+      sut.handle({ bodyContent: mockValidData() })
+    ).rejects.toThrowError(
+      new UnprocessableEntityError(
+        error.errors.map(error => ({
+          path: error.path,
+          message: error.message,
+        }))
+      )
+    );
   });
 });
