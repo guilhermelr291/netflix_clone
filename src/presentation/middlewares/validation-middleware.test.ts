@@ -25,4 +25,12 @@ describe('ValidateData', () => {
 
     expect(result).toEqual(ok('validated data'));
   });
+  test('Should call safeParseAsync with correct values', async () => {
+    const sut = makeSut();
+
+    const safeParseAsyncSpy = vi.spyOn(schema, 'safeParseAsync');
+    await sut.handle({ bodyContent: mockValidData() });
+
+    expect(safeParseAsyncSpy).toHaveBeenCalledWith(mockValidData());
+  });
 });
