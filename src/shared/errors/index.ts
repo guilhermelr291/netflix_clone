@@ -6,8 +6,8 @@ export class HttpError extends Error {
 }
 
 export class UnprocessableEntityError extends HttpError {
-  constructor(message: string) {
-    super(422, message);
+  constructor(content: any) {
+    super(422, content);
   }
 }
 export class badRequestError extends HttpError {
