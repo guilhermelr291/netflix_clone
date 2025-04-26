@@ -11,10 +11,10 @@ export const adaptRoute = (controller: Controller) => {
       res.status(result.status).json(result.body);
     } catch (error) {
       if (error instanceof HttpError) {
-        res.status(error.status).json({ message: error.message });
+        res.status(error.status).json({ error: error.message });
         return;
       }
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   };
 };
