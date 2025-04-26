@@ -3,14 +3,13 @@ import { HttpResponse } from '../../../protocols/http';
 import { AddAccount } from '../../../../domain/use-cases/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
-import { EmailValidator } from '../../../../domain/protocols/email-validator';
+
 import { created } from '../../../helpers/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
     private readonly addAccount: AddAccount,
-    private readonly fieldComparer: FieldComparer,
-    private readonly emailValidator: EmailValidator
+    private readonly fieldComparer: FieldComparer
   ) {}
 
   async handle(request: SignUpController.Params): Promise<HttpResponse> {
@@ -21,10 +20,7 @@ export class SignUpController implements Controller {
           `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
         );
 
-      const isValidEmail = this.emailValidator.isValid(request.email); //TODO: remover essa validação e usa middleware com zod para validar os campos.
-      if (!isValidEmail)
-        //TODO: configurar lint de commits
-        throw new badRequestError('Please, provide a valid email');
+      //TODO: configurar lint de commits
 
       const { name, email, password } = request;
 
