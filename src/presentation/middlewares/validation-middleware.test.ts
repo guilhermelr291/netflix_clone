@@ -22,7 +22,7 @@ describe('ValidateData', () => {
   test('Should return ok with validated data on validation success', async () => {
     const sut = makeSut();
 
-    const result = await sut.handle({ bodyContent: mockValidData() });
+    const result = await sut.handle({ body: mockValidData() });
 
     expect(result).toEqual(ok('validated data'));
   });
@@ -30,7 +30,7 @@ describe('ValidateData', () => {
     const sut = makeSut();
 
     const safeParseAsyncSpy = vi.spyOn(schema, 'safeParseAsync');
-    await sut.handle({ bodyContent: mockValidData() });
+    await sut.handle({ body: mockValidData() });
 
     expect(safeParseAsyncSpy).toHaveBeenCalledWith(mockValidData());
   });
@@ -43,13 +43,17 @@ describe('ValidateData', () => {
       error,
     });
 
-    expect(sut.handle({ bodyContent: mockValidData() })).rejects.toThrowError(
-      new UnprocessableEntityError(
-        error.errors.map(error => ({
-          path: error.path,
-          message: error.message,
-        }))
+    const errorDetails = error.errors
+      .map(
+        error =>
+          `${error.path.join ? error.path.join('.') : error.path}: ${
+            error.message
+          }`
       )
+      .join('; ');
+
+    expect(sut.handle({ body: mockValidData() })).rejects.toThrowError(
+      new UnprocessableEntityError(`Validation failed: ${errorDetails}`)
     );
   });
   test('Should throw if zod throws', async () => {
@@ -59,6 +63,6 @@ describe('ValidateData', () => {
       throw new Error();
     });
 
-    expect(sut.handle({ bodyContent: mockValidData() })).rejects.toThrow();
+    expect(sut.handle({ body: mockValidData() })).rejects.toThrow();
   });
 });
