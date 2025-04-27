@@ -105,5 +105,15 @@ describe('DbAuthentication', () => {
         authParams.password
       );
     });
+
+    test('should throw UnauthorizedError if HashComparer returns false', async () => {
+      const { sut, hashComparerStub } = makeSut();
+
+      vi.spyOn(hashComparerStub, 'compare').mockResolvedValueOnce(false);
+
+      expect(sut.auth(mockAuthenticationParams())).rejects.toThrow(
+        UnauthorizedError
+      );
+    });
   });
 });
