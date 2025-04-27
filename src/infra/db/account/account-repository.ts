@@ -1,8 +1,8 @@
 import { AddAccountRepository } from '../../../data/protocols/add-account-repository';
 import { LoadAccountByEmailRepository } from '../../../data/protocols/load-account-by-email-repository';
-import { AddAccount } from '../../../domain/use-cases/add-account';
+import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import prisma from '../../../../prisma/db';
-import { AccountModel } from '../../../domain/use-cases/models/account';
+import { AccountModel } from '../../../domain/models/account';
 
 export class AccountRepository
   implements AddAccountRepository, LoadAccountByEmailRepository

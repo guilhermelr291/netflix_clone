@@ -1,8 +1,8 @@
 import { vi, describe, test, expect } from 'vitest';
 import { AccountRepository } from './account-repository';
-import { AddAccount } from '../../../domain/use-cases/add-account';
+import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import prisma from '../../../../prisma/db';
-import { AccountModel } from '../../../domain/use-cases/models/account';
+import { AccountModel } from '../../../domain/models/account';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {

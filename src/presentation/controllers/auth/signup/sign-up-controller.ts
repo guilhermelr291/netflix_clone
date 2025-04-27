@@ -1,6 +1,6 @@
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
-import { AddAccount } from '../../../../domain/use-cases/add-account';
+import { AddAccount } from '../../../../domain/use-cases/account/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { badRequestError } from '../../../../shared/errors';
 

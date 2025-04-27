@@ -1,4 +1,4 @@
-import { AddAccount } from '../../../domain/use-cases/add-account';
+import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import { UnprocessableEntityError } from '../../../shared/errors';
 import { AddAccountRepository } from '../../protocols/add-account-repository';
 import { Hasher } from '../../protocols/hasher';

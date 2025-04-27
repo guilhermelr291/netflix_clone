@@ -1,9 +1,9 @@
 import { describe, expect, test, vi } from 'vitest';
 import { Hasher } from '../../protocols/hasher';
 import { DbAddAccount } from './db-add-account';
-import { AddAccount } from '../../../domain/use-cases/add-account';
+import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
-import { AccountModel } from '../../../domain/use-cases/models/account';
+import { AccountModel } from '../../../domain/models/account';
 import { UnprocessableEntityError } from '../../../shared/errors';
 import { AddAccountRepository } from '../../protocols/add-account-repository';
 
