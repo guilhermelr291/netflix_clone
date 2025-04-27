@@ -149,5 +149,17 @@ describe('DbAuthentication', () => {
 
       expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
+    test('should throw if LoadAccountByEmailRepository throws', async () => {
+      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+
+      vi.spyOn(
+        loadAccountByEmailRepositoryStub,
+        'loadByEmail'
+      ).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
+    });
   });
 });
