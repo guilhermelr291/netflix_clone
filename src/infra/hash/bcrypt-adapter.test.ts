@@ -27,5 +27,13 @@ describe('JwtAdapter', () => {
 
       expect(jwt.sign).toHaveBeenCalledWith({ value }, 'test_secret');
     });
+    test('should return value return by jwt.sign', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+
+      const result = sut.encrypt(value);
+
+      expect(result).toBe('encrypted_value');
+    });
   });
 });
