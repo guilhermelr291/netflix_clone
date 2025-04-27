@@ -21,6 +21,9 @@ export class DbAuthentication implements Authentication {
       data.password
     );
 
+    if (!passwordMatches)
+      throw new UnauthorizedError('incorrect email or password');
+
     return new Promise(resolve =>
       resolve({
         token: 'token',
