@@ -5,6 +5,7 @@ import { DbAuthentication } from './db-authentication';
 import { Authentication } from '../../../domain/use-cases/account/authentication';
 import { UnauthorizedError } from '../../../shared/errors';
 import { HashComparer } from '../../protocols/hash-comparer';
+import { Encrypter } from '../../protocols/encrypter';
 
 const mockAccount = (): AccountModel => ({
   id: 1,
@@ -34,11 +35,21 @@ const makeHashComparer = (): HashComparer => {
 
   return new HashComparerStub();
 };
+const makeEncrypter = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    encrypt(value: string | number): string {
+      return 'encrypted_value';
+    }
+  }
+
+  return new EncrypterStub();
+};
 
 type SutTypes = {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
+  encrypterStub: Encrypter;
 };
 
 const mockAuthenticationParams = (): Authentication.Params => ({
@@ -49,16 +60,19 @@ const mockAuthenticationParams = (): Authentication.Params => ({
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const hashComparerStub = makeHashComparer();
+  const encrypterStub = makeEncrypter();
 
   const sut = new DbAuthentication(
     loadAccountByEmailRepositoryStub,
-    hashComparerStub
+    hashComparerStub,
+    encrypterStub
   );
 
   return {
     sut,
     loadAccountByEmailRepositoryStub,
     hashComparerStub,
+    encrypterStub,
   };
 };
 
@@ -114,6 +128,16 @@ describe('DbAuthentication', () => {
       expect(sut.auth(mockAuthenticationParams())).rejects.toThrow(
         UnauthorizedError
       );
+    });
+
+    test('should call Encrypter with correct value', async () => {
+      const { sut, encrypterStub } = makeSut();
+
+      const encryptSpy = vi.spyOn(encrypterStub, 'encrypt');
+
+      await sut.auth(mockAuthenticationParams());
+
+      expect(encryptSpy).toHaveBeenCalledWith(mockAccount().id);
     });
   });
 });
