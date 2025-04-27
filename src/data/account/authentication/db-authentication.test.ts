@@ -161,5 +161,14 @@ describe('DbAuthentication', () => {
 
       expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
+    test('should throw if HashComparer throws', async () => {
+      const { sut, hashComparerStub } = makeSut();
+
+      vi.spyOn(hashComparerStub, 'compare').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
+    });
   });
 });
