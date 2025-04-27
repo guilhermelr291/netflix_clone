@@ -9,8 +9,6 @@ vi.mock('jsonwebtoken', () => ({
   },
 }));
 
-const SALT = 10;
-
 const makeSut = (): JwtAdapter => {
   process.env.JWT_SECRET = 'test_secret';
   const sut = new JwtAdapter();
@@ -34,6 +32,16 @@ describe('JwtAdapter', () => {
       const result = sut.encrypt(value);
 
       expect(result).toBe('encrypted_value');
+    });
+    test('should throw if jwt throws', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+
+      vi.mocked(jwt.sign).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(() => sut.encrypt(value)).toThrow();
     });
   });
 });
