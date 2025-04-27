@@ -16,6 +16,11 @@ export class DbAuthentication implements Authentication {
 
     if (!account) throw new UnauthorizedError('incorrect email or password');
 
+    const passwordMatches = await this.hashComparer.compare(
+      account.password,
+      data.password
+    );
+
     return new Promise(resolve =>
       resolve({
         token: 'token',
