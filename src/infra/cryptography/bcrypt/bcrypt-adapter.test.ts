@@ -6,6 +6,7 @@ vi.mock('bcrypt', () => ({
   default: {
     hash: vi.fn().mockResolvedValue('hashed_value'),
     genSalt: vi.fn().mockResolvedValue('any_salt'),
+    compare: vi.fn().mockResolvedValue(true),
   },
 }));
 
@@ -33,6 +34,17 @@ describe('BcryptAdapter', () => {
       await sut.hash(value);
 
       expect(bcrypt.genSalt).toHaveBeenCalledWith(SALT);
+    });
+  });
+  describe('compare()', () => {
+    test('should call bcrypt.compare with correct values', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+      const hash = 'hashed_value';
+
+      await sut.compare(value, hash);
+
+      expect(bcrypt.compare).toHaveBeenCalledWith(value, hash);
     });
   });
 });
