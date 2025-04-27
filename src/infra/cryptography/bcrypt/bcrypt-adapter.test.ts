@@ -35,6 +35,14 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.genSalt).toHaveBeenCalledWith(SALT);
     });
+    test('should return value returned by bcrypt.hash', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+
+      const result = await sut.hash(value);
+
+      expect(result).toBe('hashed_value');
+    });
   });
   describe('compare()', () => {
     test('should call bcrypt.compare with correct values', async () => {
@@ -53,7 +61,7 @@ describe('BcryptAdapter', () => {
 
       const result = await sut.compare(value, hash);
 
-      expect(result).toBe(result);
+      expect(result).toBe(true);
     });
   });
 });
