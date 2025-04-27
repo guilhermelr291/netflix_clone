@@ -43,5 +43,15 @@ describe('JwtAdapter', () => {
 
       expect(() => sut.encrypt(value)).toThrow();
     });
+
+    test('should throw if JWT_SECRET is not provided', () => {
+      const originalSecret = process.env.JWT_SECRET;
+
+      delete process.env.JWT_SECRET;
+
+      expect(() => new JwtAdapter()).toThrow('JwtSecret not found!');
+
+      process.env.JWT_SECRET = originalSecret;
+    });
   });
 });
