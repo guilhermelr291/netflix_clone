@@ -35,13 +35,21 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.genSalt).toHaveBeenCalledWith(SALT);
     });
-    test('should return value returned by bcrypt.hash', async () => {
+    test('should return value returned by bcrypt.hash on success', async () => {
       const sut = makeSut();
       const value = 'any_value';
 
       const result = await sut.hash(value);
 
       expect(result).toBe('hashed_value');
+    });
+    test('should throw if bcrypt throws', async () => {
+      const sut = makeSut();
+      vi.spyOn(bcrypt, 'compare').mockRejectedValueOnce(new Error());
+
+      const promise = sut.compare('any_value', 'hashed_value');
+
+      await expect(promise).rejects.toThrow();
     });
   });
   describe('compare()', () => {
@@ -54,7 +62,7 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.compare).toHaveBeenCalledWith(value, hash);
     });
-    test('should return value returned by bcrypt.compare', async () => {
+    test('should return value returned by bcrypt.compare on success', async () => {
       const sut = makeSut();
       const value = 'any_value';
       const hash = 'hashed_value';
@@ -62,6 +70,16 @@ describe('BcryptAdapter', () => {
       const result = await sut.compare(value, hash);
 
       expect(result).toBe(true);
+    });
+
+    test('should throw if bcrypt throws', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+      vi.spyOn(bcrypt, 'hash').mockRejectedValueOnce(new Error());
+
+      const promise = sut.hash(value);
+
+      await expect(promise).rejects.toThrow();
     });
   });
 });
