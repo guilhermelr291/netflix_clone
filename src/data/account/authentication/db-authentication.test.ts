@@ -170,5 +170,18 @@ describe('DbAuthentication', () => {
 
       expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
+    test('should return correct data on success', async () => {
+      const { sut } = makeSut();
+
+      const result = await sut.auth(mockAuthenticationParams());
+
+      const account = mockAccount();
+      const { id, password, ...accountData } = account;
+
+      expect(result).toEqual({
+        accessToken: 'encrypted_value',
+        account: accountData,
+      });
+    });
   });
 });
