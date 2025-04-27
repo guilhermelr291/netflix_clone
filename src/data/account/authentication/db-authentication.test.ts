@@ -139,5 +139,15 @@ describe('DbAuthentication', () => {
 
       expect(encryptSpy).toHaveBeenCalledWith(mockAccount().id);
     });
+
+    test('should throw if Encrypter throws', async () => {
+      const { sut, encrypterStub } = makeSut();
+
+      vi.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
+    });
   });
 });
