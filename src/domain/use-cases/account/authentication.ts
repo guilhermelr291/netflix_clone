@@ -9,7 +9,7 @@ export namespace Authentication {
   };
 
   export type Result = {
-    token: string;
+    accessToken: string;
     account: {
       name: string;
       email: string;
