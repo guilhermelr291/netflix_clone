@@ -46,5 +46,14 @@ describe('BcryptAdapter', () => {
 
       expect(bcrypt.compare).toHaveBeenCalledWith(value, hash);
     });
+    test('should return value returned by bcrypt.compare', async () => {
+      const sut = makeSut();
+      const value = 'any_value';
+      const hash = 'hashed_value';
+
+      const result = await sut.compare(value, hash);
+
+      expect(result).toBe(result);
+    });
   });
 });
