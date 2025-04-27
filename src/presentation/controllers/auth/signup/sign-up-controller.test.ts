@@ -2,7 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { SignUpController } from './sign-up-controller';
 import { AddAccount } from '../../../../domain/use-cases/account/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
-import { badRequestError } from '../../../../shared/errors';
+import { BadRequestError } from '../../../../shared/errors';
 
 import { created } from '../../../helpers/http-helper';
 
@@ -65,7 +65,7 @@ describe('SignUpController', () => {
     vi.spyOn(fieldComparerStub, 'compare').mockReturnValueOnce(false);
 
     await expect(sut.handle(mockRequestParams())).rejects.toThrow(
-      badRequestError
+      BadRequestError
     );
   });
 

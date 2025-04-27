@@ -1,4 +1,5 @@
 import { Authentication } from '../../../domain/use-cases/account/authentication';
+import { UnauthorizedError } from '../../../shared/errors';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
 
 export class DbAuthentication implements Authentication {
@@ -10,6 +11,8 @@ export class DbAuthentication implements Authentication {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       data.email
     );
+
+    if (!account) throw new UnauthorizedError('incorrect email or password');
 
     return new Promise(resolve =>
       resolve({

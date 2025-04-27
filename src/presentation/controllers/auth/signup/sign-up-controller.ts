@@ -2,7 +2,7 @@ import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
 import { AddAccount } from '../../../../domain/use-cases/account/add-account';
 import { FieldComparer } from '../../../protocols/field-comparer';
-import { badRequestError } from '../../../../shared/errors';
+import { BadRequestError } from '../../../../shared/errors';
 
 import { created } from '../../../helpers/http-helper';
 
@@ -16,7 +16,7 @@ export class SignUpController implements Controller {
     try {
       const isEqual = this.fieldComparer.compare(request);
       if (!isEqual)
-        throw new badRequestError(
+        throw new BadRequestError(
           `${this.fieldComparer.fieldToCompare} does not match ${this.fieldComparer.field}`
         );
 
