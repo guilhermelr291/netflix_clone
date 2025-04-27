@@ -28,14 +28,11 @@ export class DbAuthentication implements Authentication {
 
     const accessToken = this.encrypter.encrypt(account.id);
 
-    return new Promise(resolve =>
-      resolve({
-        accessToken,
-        account: {
-          name: '',
-          email: '',
-        },
-      })
-    );
+    const { id, password, ...accountData } = account;
+
+    return {
+      accessToken,
+      account: accountData,
+    };
   }
 }
