@@ -3,6 +3,7 @@ import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-em
 import { AccountModel } from '../../../domain/models/account';
 import { DbAuthentication } from './db-authentication';
 import { Authentication } from '../../../domain/use-cases/account/authentication';
+import { UnauthorizedError } from '../../../shared/errors';
 
 const mockAccount = (): AccountModel => ({
   id: 1,
@@ -59,6 +60,18 @@ describe('DbAuthentication', () => {
       await sut.auth(authParams);
 
       expect(loadByEmailSpy).toHaveBeenCalledWith(authParams.email);
+    });
+    test('should throw UnauthorizedError if LoadAccountByEmailRepository returns null', async () => {
+      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+
+      vi.spyOn(
+        loadAccountByEmailRepositoryStub,
+        'loadByEmail'
+      ).mockResolvedValueOnce(null);
+
+      expect(sut.auth(mockAuthenticationParams())).rejects.toThrow(
+        UnauthorizedError
+      );
     });
   });
 });
