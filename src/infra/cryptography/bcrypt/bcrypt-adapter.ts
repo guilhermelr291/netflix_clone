@@ -7,6 +7,7 @@ export class BcryptAdapter implements Hasher {
   }
   async hash(value: string): Promise<string> {
     const salt = await bcrypt.genSalt(this.salt);
+
     const hashedValue = await bcrypt.hash(value, salt);
 
     return hashedValue;
