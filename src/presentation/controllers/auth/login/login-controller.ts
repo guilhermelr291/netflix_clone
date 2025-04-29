@@ -7,7 +7,10 @@ export class LoginController implements Controller {
   constructor(private readonly authentication: Authentication) {}
   async handle(request: Authentication.Params): Promise<HttpResponse> {
     try {
-      const accessTokenAndAccount = await this.authentication.auth(request);
+      const { email, password } = request;
+      const data = { email, password };
+
+      const accessTokenAndAccount = await this.authentication.auth(data);
 
       return ok('');
     } catch (error) {

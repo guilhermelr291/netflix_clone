@@ -49,4 +49,13 @@ describe('LoginController', () => {
 
     expect(authSpy).toHaveBeenCalledWith(requestData);
   });
+  test('should throw if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    vi.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.handle(mockRequestData())).rejects.toThrow();
+  });
 });
