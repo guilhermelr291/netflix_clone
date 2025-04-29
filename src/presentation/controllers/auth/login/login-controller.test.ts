@@ -58,4 +58,11 @@ describe('LoginController', () => {
 
     expect(sut.handle(mockRequestData())).rejects.toThrow();
   });
+  test('should return correct values on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockRequestData());
+
+    expect(result).toEqual({ status: 200, body: mockAuthenticationResult() });
+  });
 });
