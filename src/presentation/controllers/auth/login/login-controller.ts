@@ -12,7 +12,7 @@ export class LoginController implements Controller {
 
       const accessTokenAndAccount = await this.authentication.auth(data);
 
-      return ok('');
+      return ok(accessTokenAndAccount);
     } catch (error) {
       console.error('Error on login: ', error);
       throw error;
