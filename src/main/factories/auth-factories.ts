@@ -5,6 +5,9 @@ import { SignUpController } from '../../presentation/controllers/auth/signup/sig
 import { ValidateData } from '../../presentation/middlewares/validation-middleware';
 import { FieldComparerImpl } from '../../utils/validations/field-comparer';
 import { makeHasher } from './hasher';
+import { LoginController } from '../../presentation/controllers/auth/login/login-controller';
+import { DbAuthentication } from '../../data/account/authentication/db-authentication';
+import { makeEncrypter } from './encrypter';
 
 export const makeFieldComparer = (): FieldComparerImpl => {
   return new FieldComparerImpl('password', 'passwordConfirmation');
@@ -18,6 +21,13 @@ export const makeAddAccount = (): DbAddAccount => {
     makeHasher(),
     makeAccountRepository(),
     makeAccountRepository()
+  );
+};
+export const makeAuthentication = (): DbAuthentication => {
+  return new DbAuthentication(
+    makeAccountRepository(),
+    makeHasher(),
+    makeEncrypter()
   );
 };
 export const makeSignUpController = (): SignUpController => {
@@ -35,4 +45,8 @@ export const makeValidateDataMiddleware = (): ValidateData => {
   });
 
   return new ValidateData(signUpSchema);
+};
+
+export const makeLoginController = (): LoginController => {
+  return new LoginController(makeAuthentication());
 };
