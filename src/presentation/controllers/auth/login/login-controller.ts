@@ -1,11 +1,18 @@
-import { DbAuthentication } from '../../../../data/account/authentication/db-authentication';
+import { Authentication } from '../../../../domain/use-cases/account/authentication';
 import { ok } from '../../../helpers/http-helper';
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
 
 export class LoginController implements Controller {
-  constructor(private readonly dbAuthentication: DbAuthentication) {}
-  async handle(request: any): Promise<HttpResponse> {
-    return ok('');
+  constructor(private readonly authentication: Authentication) {}
+  async handle(request: Authentication.Params): Promise<HttpResponse> {
+    try {
+      const accessTokenAndAccount = await this.authentication.auth(request);
+
+      return ok('');
+    } catch (error) {
+      console.error('Error on login: ', error);
+      throw error;
+    }
   }
 }
