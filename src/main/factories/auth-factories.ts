@@ -34,7 +34,7 @@ export const makeSignUpController = (): SignUpController => {
   return new SignUpController(makeAddAccount(), makeFieldComparer());
 };
 
-export const makeValidateDataMiddleware = (): ValidateData => {
+export const makeSignUpDataValidationMiddleware = (): ValidateData => {
   const signUpSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     email: z.string().email('Invalid email format'),
@@ -45,6 +45,14 @@ export const makeValidateDataMiddleware = (): ValidateData => {
   });
 
   return new ValidateData(signUpSchema);
+};
+export const makeLoginDataValidationMiddleware = (): ValidateData => {
+  const loginSchema = z.object({
+    email: z.string().email('Invalid email format'),
+    password: z.string().min(6, 'Password must be at least 6 characters long'),
+  });
+
+  return new ValidateData(loginSchema);
 };
 
 export const makeLoginController = (): LoginController => {

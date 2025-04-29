@@ -3,14 +3,21 @@ import { adaptRoute } from '../adapters/express-route-adapter';
 import { adaptMiddleware } from '../adapters/express-middleware-adapter';
 
 import {
+  makeLoginController,
+  makeLoginDataValidationMiddleware,
   makeSignUpController,
-  makeValidateDataMiddleware,
-} from '../factories/account-factories';
+  makeSignUpDataValidationMiddleware,
+} from '../factories/auth-factories';
 
 export default (router: Router): void => {
   router.post(
     '/signup',
-    adaptMiddleware(makeValidateDataMiddleware()),
+    adaptMiddleware(makeSignUpDataValidationMiddleware()),
     adaptRoute(makeSignUpController())
+  );
+  router.post(
+    '/login',
+    adaptMiddleware(makeLoginDataValidationMiddleware()),
+    adaptRoute(makeLoginController())
   );
 };
