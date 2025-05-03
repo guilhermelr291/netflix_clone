@@ -69,4 +69,15 @@ describe('DbAddMovie', () => {
 
     expect(sut.add(mockAddMovieParams())).rejects.toThrow(ConflictError);
   });
+  test('should throw if LoadMovieByTitleRepository throws', async () => {
+    const { sut, loadMovieByTitleRepositoryStub } = makeSut();
+    vi.spyOn(
+      loadMovieByTitleRepositoryStub,
+      'loadByTitle'
+    ).mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.add(mockAddMovieParams())).rejects.toThrow();
+  });
 });
