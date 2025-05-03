@@ -107,4 +107,13 @@ describe('DbAddMovie', () => {
 
     expect(loadByTitleSpy).toHaveBeenCalledWith(params);
   });
+
+  test('should throw if AddMovieRepository throws', async () => {
+    const { sut, addMovieRepositoryStub } = makeSut();
+    vi.spyOn(addMovieRepositoryStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.add(mockAddMovieParams())).rejects.toThrow();
+  });
 });
