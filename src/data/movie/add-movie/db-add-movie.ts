@@ -10,9 +10,14 @@ export class DbAddMovie implements AddMovie {
     private readonly addMovieRepository: AddMovieRepository
   ) {}
   async add(data: AddMovie.Params): Promise<Movie> {
-    const movie = await this.loadMovieByTitleRepository.loadByTitle(data.title);
-    if (movie) throw new ConflictError('Movie with this title already exists');
+    const movieExists = await this.loadMovieByTitleRepository.loadByTitle(
+      data.title
+    );
+    if (movieExists)
+      throw new ConflictError('Movie with this title already exists');
 
-    await this.addMovieRepository.add(data);
+    const movie = await this.addMovieRepository.add(data);
+
+    return movie;
   }
 }
