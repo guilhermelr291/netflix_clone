@@ -2,6 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { DbAddMovie } from './db-add-movie';
 import { LoadMovieByTitleRepository } from '../../protocols/movie/load-movie-by-title-repository';
 import { Movie } from '../../../domain/models/movie';
+import { ConflictError } from '../../../shared/errors';
 
 type sutTypes = {
   sut: DbAddMovie;
@@ -30,8 +31,8 @@ const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
 
 const makeLoadMovieByTitleRepository = (): LoadMovieByTitleRepository => {
   class LoadMovieByTitleRepositoryStub implements LoadMovieByTitleRepository {
-    loadByTitle(title: string): Promise<Movie> {
-      return new Promise(resolve => resolve(mockMovie()));
+    loadByTitle(title: string): Promise<Movie | null> {
+      return new Promise(resolve => resolve(null));
     }
   }
 
@@ -58,5 +59,14 @@ describe('DbAddMovie', () => {
     await sut.add(params);
 
     expect(loadByTitleSpy).toHaveBeenCalledWith(params.title);
+  });
+  test('should throw ConflictError if LoadMovieByTitleRepository returns a movie', async () => {
+    const { sut, loadMovieByTitleRepositoryStub } = makeSut();
+    vi.spyOn(
+      loadMovieByTitleRepositoryStub,
+      'loadByTitle'
+    ).mockResolvedValueOnce(mockMovie());
+
+    expect(sut.add(mockAddMovieParams())).rejects.toThrow(ConflictError);
   });
 });
