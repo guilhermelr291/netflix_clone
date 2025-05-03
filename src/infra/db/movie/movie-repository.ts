@@ -14,5 +14,7 @@ export class MovieRepository
   }
   async add(data: AddMovie.Params): Promise<Movie> {
     const movie = await prisma.movie.create({ data });
+
+    return movie;
   }
 }
