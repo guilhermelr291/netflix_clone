@@ -5,5 +5,7 @@ import { Movie } from '../../../domain/models/movie';
 export class MovieRepository implements LoadMovieByTitleRepository {
   async loadByTitle(title: string): Promise<Movie | null> {
     const movie = await prisma.movie.findUnique({ where: { title } });
+
+    return movie;
   }
 }

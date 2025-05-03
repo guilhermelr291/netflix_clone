@@ -23,7 +23,7 @@ model Movie {
   previewUrl String 
   thumbnailUrl String
   description String 
-  rating Decimal 
+  rating Float 
   releaseYear Int
   durationInMinutes Int
 }
