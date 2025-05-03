@@ -47,5 +47,16 @@ describe('MovieRepository', () => {
         where: { title },
       });
     });
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.movie.findUnique).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      const title = 'any_title';
+
+      expect(sut.loadByTitle(title)).rejects.toThrow();
+    });
   });
 });
