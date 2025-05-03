@@ -98,5 +98,15 @@ describe('MovieRepository', () => {
         data,
       });
     });
+
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.movie.create).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.add(mockAddMovieParams())).rejects.toThrow();
+    });
   });
 });
