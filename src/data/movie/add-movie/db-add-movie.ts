@@ -6,5 +6,7 @@ export class DbAddMovie implements AddMovie {
   constructor(
     private readonly loadMovieByTitleRepository: LoadMovieByTitleRepository
   ) {}
-  async add(data: AddMovie.Params): Promise<Movie> {}
+  async add(data: AddMovie.Params): Promise<Movie> {
+    const movie = await this.loadMovieByTitleRepository.loadByTitle(data.title);
+  }
 }
