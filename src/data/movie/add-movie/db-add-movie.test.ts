@@ -116,4 +116,11 @@ describe('DbAddMovie', () => {
 
     expect(sut.add(mockAddMovieParams())).rejects.toThrow();
   });
+  test('should return created movie on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.add(mockAddMovieParams());
+
+    expect(result).toEqual(mockMovie());
+  });
 });
