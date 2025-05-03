@@ -3,11 +3,8 @@ import { DbAddMovie } from './db-add-movie';
 import { LoadMovieByTitleRepository } from '../../protocols/movie/load-movie-by-title-repository';
 import { Movie } from '../../../domain/models/movie';
 import { ConflictError } from '../../../shared/errors';
-
-type sutTypes = {
-  sut: DbAddMovie;
-  loadMovieByTitleRepositoryStub: LoadMovieByTitleRepository;
-};
+import { AddMovieRepository } from '../../protocols/movie/add-movie-repository';
+import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
 
 const mockMovie = (): Movie => ({
   id: 1,
@@ -31,19 +28,38 @@ const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
 
 const makeLoadMovieByTitleRepository = (): LoadMovieByTitleRepository => {
   class LoadMovieByTitleRepositoryStub implements LoadMovieByTitleRepository {
-    loadByTitle(title: string): Promise<Movie | null> {
+    async loadByTitle(title: string): Promise<Movie | null> {
       return new Promise(resolve => resolve(null));
     }
   }
 
   return new LoadMovieByTitleRepositoryStub();
 };
+const makeAddMovieByRepository = (): AddMovieRepository => {
+  class AddMovieRepositoryStub implements AddMovieRepository {
+    async add(data: AddMovie.Params): Promise<Movie> {
+      return new Promise(resolve => resolve(mockMovie()));
+    }
+  }
+
+  return new AddMovieRepositoryStub();
+};
+
+type sutTypes = {
+  sut: DbAddMovie;
+  loadMovieByTitleRepositoryStub: LoadMovieByTitleRepository;
+  addMovieRepositoryStub: AddMovieRepository;
+};
 
 const makeSut = (): sutTypes => {
   const loadMovieByTitleRepositoryStub = makeLoadMovieByTitleRepository();
-  const sut = new DbAddMovie(loadMovieByTitleRepositoryStub);
+  const addMovieRepositoryStub = makeAddMovieByRepository();
+  const sut = new DbAddMovie(
+    loadMovieByTitleRepositoryStub,
+    addMovieRepositoryStub
+  );
 
-  return { sut, loadMovieByTitleRepositoryStub };
+  return { sut, loadMovieByTitleRepositoryStub, addMovieRepositoryStub };
 };
 
 describe('DbAddMovie', () => {
@@ -79,5 +95,16 @@ describe('DbAddMovie', () => {
     });
 
     expect(sut.add(mockAddMovieParams())).rejects.toThrow();
+  });
+
+  test('should call AddMovieRepository with correct data', async () => {
+    const { sut, addMovieRepositoryStub } = makeSut();
+    const loadByTitleSpy = vi.spyOn(addMovieRepositoryStub, 'add');
+
+    const params = mockAddMovieParams();
+
+    await sut.add(params);
+
+    expect(loadByTitleSpy).toHaveBeenCalledWith(params);
   });
 });
