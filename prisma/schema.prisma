@@ -16,3 +16,14 @@ model User {
   email String @unique
   password String
 }
+
+model Movie {
+  id Int @id @default(autoincrement())
+  title String 
+  previewUrl String 
+  thumbnailUrl String
+  description String 
+  rating Decimal 
+  releaseYear Int
+  durationInMinutes Int
+}
