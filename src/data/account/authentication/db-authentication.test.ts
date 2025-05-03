@@ -4,8 +4,8 @@ import { AccountModel } from '../../../domain/models/account';
 import { DbAuthentication } from './db-authentication';
 import { Authentication } from '../../../domain/use-cases/account/authentication';
 import { UnauthorizedError } from '../../../shared/errors';
-import { HashComparer } from '../../protocols/hash-comparer';
-import { Encrypter } from '../../protocols/encrypter';
+import { HashComparer } from '../../protocols/cryptography/hash-comparer';
+import { Encrypter } from '../../protocols/cryptography/encrypter';
 
 const mockAccount = (): AccountModel => ({
   id: 1,

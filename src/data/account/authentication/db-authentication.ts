@@ -1,7 +1,7 @@
 import { Authentication } from '../../../domain/use-cases/account/authentication';
 import { UnauthorizedError } from '../../../shared/errors';
-import { Encrypter } from '../../protocols/encrypter';
-import { HashComparer } from '../../protocols/hash-comparer';
+import { Encrypter } from '../../protocols/cryptography/encrypter';
+import { HashComparer } from '../../protocols/cryptography/hash-comparer';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
 
 export class DbAuthentication implements Authentication {

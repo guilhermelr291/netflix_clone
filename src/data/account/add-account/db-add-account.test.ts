@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from 'vitest';
-import { Hasher } from '../../protocols/hasher';
+import { Hasher } from '../../protocols/cryptography/hasher';
 import { DbAddAccount } from './db-add-account';
 import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';

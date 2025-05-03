@@ -1,7 +1,7 @@
 import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import { UnprocessableEntityError } from '../../../shared/errors';
 import { AddAccountRepository } from '../../protocols/add-account-repository';
-import { Hasher } from '../../protocols/hasher';
+import { Hasher } from '../../protocols/cryptography/hasher';
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
 
 export class DbAddAccount implements AddAccount {
