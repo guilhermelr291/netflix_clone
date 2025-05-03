@@ -1,0 +1,62 @@
+import { vi, test, describe, expect } from 'vitest';
+import { DbAddMovie } from './db-add-movie';
+import { LoadMovieByTitleRepository } from '../../protocols/movie/load-movie-by-title-repository';
+import { Movie } from '../../../domain/models/movie';
+
+type sutTypes = {
+  sut: DbAddMovie;
+  loadMovieByTitleRepositoryStub: LoadMovieByTitleRepository;
+};
+
+const mockMovie = (): Movie => ({
+  id: 1,
+  title: 'Fake Movie',
+  previewUrl: 'http://example.com/preview',
+  thumbnailUrl: 'http://example.com/thumbnail',
+  description: 'This is a fake movie description.',
+  rating: 4.5,
+  releaseYear: 2023,
+  durationInMinutes: 120,
+});
+const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
+  title: 'Fake Movie',
+  previewUrl: 'http://example.com/preview',
+  thumbnailUrl: 'http://example.com/thumbnail',
+  description: 'This is a fake movie description.',
+  rating: 4.5,
+  releaseYear: 2023,
+  durationInMinutes: 120,
+});
+
+const makeLoadMovieByTitleRepository = (): LoadMovieByTitleRepository => {
+  class LoadMovieByTitleRepositoryStub implements LoadMovieByTitleRepository {
+    loadByTitle(title: string): Promise<Movie> {
+      return new Promise(resolve => resolve(mockMovie()));
+    }
+  }
+
+  return new LoadMovieByTitleRepositoryStub();
+};
+
+const makeSut = (): sutTypes => {
+  const loadMovieByTitleRepositoryStub = makeLoadMovieByTitleRepository();
+  const sut = new DbAddMovie(loadMovieByTitleRepositoryStub);
+
+  return { sut, loadMovieByTitleRepositoryStub };
+};
+
+describe('DbAddMovie', () => {
+  test('should call LoadMovieByTitleRepository with correct value', async () => {
+    const { sut, loadMovieByTitleRepositoryStub } = makeSut();
+    const loadByTitleSpy = vi.spyOn(
+      loadMovieByTitleRepositoryStub,
+      'loadByTitle'
+    );
+
+    const params = mockAddMovieParams();
+
+    await sut.add(params);
+
+    expect(loadByTitleSpy).toHaveBeenCalledWith(params.title);
+  });
+});
