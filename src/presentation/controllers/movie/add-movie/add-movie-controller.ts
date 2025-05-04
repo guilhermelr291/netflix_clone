@@ -1,4 +1,5 @@
 import { AddMovie } from '../../../../domain/use-cases/movie/add-movie';
+import { created } from '../../../helpers/http-helper';
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
 
@@ -17,7 +18,9 @@ export class AddMovieController implements Controller {
         thumbnailUrl: request.thumbnailUrl,
       };
 
-      await this.addMovie.add(movieData);
+      const movie = await this.addMovie.add(movieData);
+
+      return created(movie);
     } catch (error) {
       console.error('Error on AddMovieController: ', error);
       throw error;
