@@ -47,7 +47,7 @@ const makeSut = (): SutTypes => {
 };
 
 describe('AddMovieController', () => {
-  test('should call addMovie with correct ', async () => {
+  test('should call AddMovie with correct ', async () => {
     const { sut, addMovieStub } = makeSut();
 
     const addSpy = vi.spyOn(addMovieStub, 'add');
@@ -57,5 +57,14 @@ describe('AddMovieController', () => {
     await sut.handle(addMovieParams);
 
     expect(addSpy).toHaveBeenCalledWith(addMovieParams);
+  });
+  test('should throw if AddMovie throws', async () => {
+    const { sut, addMovieStub } = makeSut();
+
+    vi.spyOn(addMovieStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(sut.handle(mockAddMovieParams())).rejects.toThrow();
   });
 });
