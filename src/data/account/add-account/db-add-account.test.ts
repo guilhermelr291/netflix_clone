@@ -2,10 +2,10 @@ import { describe, expect, test, vi } from 'vitest';
 import { Hasher } from '../../protocols/cryptography/hasher';
 import { DbAddAccount } from './db-add-account';
 import { AddAccount } from '../../../domain/use-cases/account/add-account';
-import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
+import { LoadAccountByEmailRepository } from '../../protocols/account/load-account-by-email-repository';
 import { AccountModel } from '../../../domain/models/account';
 import { UnprocessableEntityError } from '../../../shared/errors';
-import { AddAccountRepository } from '../../protocols/add-account-repository';
+import { AddAccountRepository } from '../../protocols/account/add-account-repository';
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {

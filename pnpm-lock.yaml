@@ -46,6 +46,9 @@ devDependencies:
   eslint:
     specifier: ^9.26.0
     version: 9.26.0
+  globals:
+    specifier: ^16.0.0
+    version: 16.0.0
   husky:
     specifier: ^9.1.7
     version: 9.1.7
@@ -1878,6 +1881,11 @@ packages:
 
   /globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+    dev: true
+
+  /globals@16.0.0:
+    resolution: {integrity: sha512-iInW14XItCXET01CQFqudPOWP2jYMl7T+QRQT+UNcR/iQncN/F0UNpgd76iFkBPgNQb4+X3LV9tLJYzwh+Gl3A==}
     engines: {node: '>=18'}
     dev: true
 
