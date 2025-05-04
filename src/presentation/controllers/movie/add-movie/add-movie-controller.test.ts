@@ -2,6 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { AddMovie } from '../../../../domain/use-cases/movie/add-movie';
 import { Movie } from '../../../../domain/models/movie';
 import { AddMovieController } from './add-movie-controller';
+import { created } from '../../../helpers/http-helper';
 
 const mockMovie = (): Movie => ({
   id: 1,
@@ -66,5 +67,12 @@ describe('AddMovieController', () => {
     });
 
     expect(sut.handle(mockAddMovieParams())).rejects.toThrow();
+  });
+  test('should return created movie and correct status on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockAddMovieParams());
+
+    expect(result).toEqual(created(mockMovie()));
   });
 });
