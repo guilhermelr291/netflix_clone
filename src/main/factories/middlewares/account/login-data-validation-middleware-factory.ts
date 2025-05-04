@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ValidateData } from '../../../presentation/middlewares/validation-middleware';
+import { ValidateData } from '../../../../presentation/middlewares/validation-middleware';
 
 export const makeLoginDataValidationMiddleware = (): ValidateData => {
   const loginSchema = z.object({
