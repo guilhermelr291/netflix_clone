@@ -62,5 +62,11 @@ describe('JwtAdapter', () => {
 
       expect(jwt.verify).toHaveBeenCalledWith('any_token', 'test_secret');
     });
+    test('should return correct value on verify success', () => {
+      const sut = makeSut();
+      const value = sut.decrypt('any_token');
+
+      expect(value).toEqual({ value: 'any_value' });
+    });
   });
 });
