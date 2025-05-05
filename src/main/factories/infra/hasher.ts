@@ -1,4 +1,4 @@
-import { BcryptAdapter } from '../../../infra/cryptography/bcrypt/bcrypt-adapter';
+import { BcryptAdapter } from '../../../infra/hash/bcrypt/bcrypt-adapter';
 
 export const makeHasher = (): BcryptAdapter => {
   return new BcryptAdapter(10);

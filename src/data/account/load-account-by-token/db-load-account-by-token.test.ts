@@ -6,8 +6,8 @@ import { DbLoadAccountByToken } from './db-load-account-by-token';
 
 const makeDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {
-    decrypt(): Promise<any> {
-      return new Promise(resolve => resolve({ id: 1 }));
+    decrypt(): any {
+      return { id: 1 };
     }
   }
 
