@@ -65,5 +65,14 @@ describe('DbLoadAccountByToken', () => {
 
       expect(decryptSpy).toHaveBeenCalledWith(token);
     });
+    test('should throw if Decrypter throws', async () => {
+      const { sut, decrypterStub } = makeSut();
+
+      vi.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.loadByToken('any_token')).rejects.toThrow();
+    });
   });
 });
