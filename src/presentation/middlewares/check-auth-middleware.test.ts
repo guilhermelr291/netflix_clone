@@ -51,4 +51,15 @@ describe('CheckAuth', () => {
       requestData.headers.authorization.split(' ')[1]
     );
   });
+  test('should throw if LoadAccountByToken throws', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+
+    vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockImplementationOnce(
+      () => {
+        throw new Error();
+      }
+    );
+
+    expect(sut.handle(mockRequest())).rejects.toThrow();
+  });
 });

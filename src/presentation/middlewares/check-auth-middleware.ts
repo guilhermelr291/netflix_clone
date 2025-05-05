@@ -15,7 +15,7 @@ export class CheckAuth implements Middleware {
 
     const account = await this.loadAccountByToken.loadByToken(token);
 
-    return ok({ id: account?.id });
+    return ok({ accountId: account?.id });
   }
 }
 
