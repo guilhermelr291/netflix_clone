@@ -1,5 +1,5 @@
-import { AddAccountRepository } from '../../../data/protocols/add-account-repository';
-import { LoadAccountByEmailRepository } from '../../../data/protocols/load-account-by-email-repository';
+import { AddAccountRepository } from '../../../data/protocols/account/add-account-repository';
+import { LoadAccountByEmailRepository } from '../../../data/protocols/account/load-account-by-email-repository';
 import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import prisma from '../../../../prisma/db';
 import { AccountModel } from '../../../domain/models/account';
