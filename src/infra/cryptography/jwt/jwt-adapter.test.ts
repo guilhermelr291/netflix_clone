@@ -68,5 +68,13 @@ describe('JwtAdapter', () => {
 
       expect(value).toEqual({ value: 'any_value' });
     });
+    test('should throw if verify throws', () => {
+      const sut = makeSut();
+      vi.mocked(jwt.verify).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(() => sut.decrypt('any_token')).toThrow();
+    });
   });
 });
