@@ -106,5 +106,12 @@ describe('DbLoadAccountByToken', () => {
 
       expect(sut.loadByToken('any_token')).rejects.toThrow();
     });
+    test('should return an account on success', async () => {
+      const { sut } = makeSut();
+
+      const account = await sut.loadByToken('any_token');
+
+      expect(account).toEqual(mockAccount());
+    });
   });
 });
