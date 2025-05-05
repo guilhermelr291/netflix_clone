@@ -74,4 +74,11 @@ describe('CheckAuth', () => {
       })
     ).rejects.toThrow(UnauthorizedError);
   });
+  test('should throw UnauthorizedError if LoadAccountByToken returns null', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+
+    vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockResolvedValueOnce(null);
+
+    expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
+  });
 });
