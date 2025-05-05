@@ -53,7 +53,7 @@ describe('CheckAuth', () => {
       requestData.headers.authorization.split(' ')[1]
     );
   });
-  test('should throw if LoadAccountByToken throws', async () => {
+  test('should throw UnauthorizedError if LoadAccountByToken throws', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
 
     vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockImplementationOnce(
@@ -62,7 +62,7 @@ describe('CheckAuth', () => {
       }
     );
 
-    expect(sut.handle(mockRequest())).rejects.toThrow();
+    expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
   });
   test('should throw UnauthorizedError if token is not provided', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();

@@ -8,15 +8,20 @@ import { Middleware } from '../protocols/middleware';
 export class CheckAuth implements Middleware {
   constructor(private readonly loadAccountByToken: LoadAccountByToken) {}
   async handle(request: CheckAuth.Params): Promise<HttpResponse> {
-    const headers = request.headers;
+    try {
+      const headers = request.headers;
 
-    const token = headers?.authorization?.split(' ')[1];
-    if (!token) throw new UnauthorizedError('Token not provided');
+      const token = headers?.authorization?.split(' ')[1];
+      if (!token) throw new UnauthorizedError('Token not provided');
 
-    const account = await this.loadAccountByToken.loadByToken(token);
-    if (!account) throw new UnauthorizedError();
+      const account = await this.loadAccountByToken.loadByToken(token);
+      if (!account) throw new UnauthorizedError();
 
-    return ok({ accountId: account?.id });
+      return ok({ accountId: account?.id });
+    } catch (error) {
+      if (error instanceof UnauthorizedError) throw error;
+      throw new UnauthorizedError();
+    }
   }
 }
 
