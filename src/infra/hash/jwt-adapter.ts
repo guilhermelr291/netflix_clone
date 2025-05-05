@@ -2,10 +2,11 @@ import { Encrypter } from '../../data/protocols/cryptography/encrypter';
 import jwt from 'jsonwebtoken';
 
 import dotenv from 'dotenv';
+import { Decrypter } from '../../data/protocols/cryptography/decrypter';
 
 dotenv.config();
 
-export class JwtAdapter implements Encrypter {
+export class JwtAdapter implements Encrypter, Decrypter {
   private readonly jwtSecret: string;
   constructor() {
     const SECRET = process.env.JWT_SECRET;
@@ -19,4 +20,5 @@ export class JwtAdapter implements Encrypter {
   encrypt(value: string | number): string {
     return jwt.sign({ value }, this.jwtSecret);
   }
+  decrypt(encryptedValue: string): Promise<any> {}
 }

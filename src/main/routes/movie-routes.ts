@@ -7,6 +7,8 @@ import {
 } from '../factories';
 
 export default (router: Router): void => {
+  router.use();
+
   router.post(
     '/movies',
     adaptMiddleware(makeAddMovieDataValidationMiddleware()),

@@ -3,9 +3,13 @@ import { LoadAccountByEmailRepository } from '../../../data/protocols/account/lo
 import { AddAccount } from '../../../domain/use-cases/account/add-account';
 import prisma from '../../../../prisma/db';
 import { AccountModel } from '../../../domain/models/account';
+import { LoadAccountByIdRepository } from '../../../data/protocols/account/load-account-by-id-repository';
 
 export class AccountRepository
-  implements AddAccountRepository, LoadAccountByEmailRepository
+  implements
+    AddAccountRepository,
+    LoadAccountByEmailRepository,
+    LoadAccountByIdRepository
 {
   async add(data: AddAccount.Params): Promise<void> {
     await prisma.user.create({ data });
@@ -15,4 +19,5 @@ export class AccountRepository
 
     return account;
   }
+  loadById(id: number): Promise<AccountModel | null> {}
 }
