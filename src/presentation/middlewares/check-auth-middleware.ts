@@ -10,7 +10,7 @@ export class CheckAuth implements Middleware {
   async handle(request: CheckAuth.Params): Promise<HttpResponse> {
     const headers = request.headers;
 
-    const token = headers.authorization.split(' ')[1];
+    const token = headers?.authorization?.split(' ')[1];
     if (!token) throw new UnauthorizedError('Token not provided');
 
     const account = await this.loadAccountByToken.loadByToken(token);
