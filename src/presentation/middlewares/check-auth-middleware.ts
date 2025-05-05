@@ -14,6 +14,7 @@ export class CheckAuth implements Middleware {
     if (!token) throw new UnauthorizedError('Token not provided');
 
     const account = await this.loadAccountByToken.loadByToken(token);
+    if (!account) throw new UnauthorizedError();
 
     return ok({ accountId: account?.id });
   }
