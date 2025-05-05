@@ -94,5 +94,17 @@ describe('DbLoadAccountByToken', () => {
 
       expect(account).toBeNull();
     });
+    test('should throw if LoadAccountByIdRepository throws', async () => {
+      const { sut, loadAccountByIdRepositoryStub } = makeSut();
+
+      vi.spyOn(
+        loadAccountByIdRepositoryStub,
+        'loadById'
+      ).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(sut.loadByToken('any_token')).rejects.toThrow();
+    });
   });
 });
