@@ -74,5 +74,25 @@ describe('DbLoadAccountByToken', () => {
 
       expect(sut.loadByToken('any_token')).rejects.toThrow();
     });
+    test('should call LoadAccountByIdRepository with correct id', async () => {
+      const { sut, loadAccountByIdRepositoryStub } = makeSut();
+
+      const loadByIdSpy = vi.spyOn(loadAccountByIdRepositoryStub, 'loadById');
+
+      await sut.loadByToken('any_token');
+
+      expect(loadByIdSpy).toHaveBeenCalledWith(1);
+    });
+    test('should return null if LoadAccountByIdRepository returns null', async () => {
+      const { sut, loadAccountByIdRepositoryStub } = makeSut();
+
+      vi.spyOn(loadAccountByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+        null
+      );
+
+      const account = await sut.loadByToken('any_token');
+
+      expect(account).toBeNull();
+    });
   });
 });
