@@ -2,6 +2,7 @@ import { vi, describe, test, expect } from 'vitest';
 import { CheckAuth } from './check-auth-middleware';
 import { LoadAccountByToken } from '../../domain/use-cases/account/load-account-by-token';
 import { AccountModel } from '../../domain/models/account';
+import { UnauthorizedError } from '../../shared/errors';
 
 const mockAccount = (): AccountModel => ({
   id: 1,
@@ -61,5 +62,16 @@ describe('CheckAuth', () => {
     );
 
     expect(sut.handle(mockRequest())).rejects.toThrow();
+  });
+  test('should throw UnauthorizedError if token is not provided', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+
+    expect(
+      sut.handle({
+        headers: {
+          authorization: '',
+        },
+      })
+    ).rejects.toThrow(UnauthorizedError);
   });
 });
