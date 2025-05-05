@@ -3,6 +3,7 @@ import { CheckAuth } from './check-auth-middleware';
 import { LoadAccountByToken } from '../../domain/use-cases/account/load-account-by-token';
 import { AccountModel } from '../../domain/models/account';
 import { UnauthorizedError } from '../../shared/errors';
+import { ok } from '../helpers/http-helper';
 
 const mockAccount = (): AccountModel => ({
   id: 1,
@@ -80,5 +81,12 @@ describe('CheckAuth', () => {
     vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockResolvedValueOnce(null);
 
     expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
+  });
+  test('should return correct status and accountId on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.handle(mockRequest());
+
+    expect(result).toEqual(ok({ accountId: mockAccount().id }));
   });
 });
