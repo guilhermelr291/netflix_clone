@@ -103,5 +103,13 @@ describe('AccountRepository', () => {
 
       expect(result).toEqual(mockAccount());
     });
+    test('should throw if prisma  throws', async () => {
+      const sut = makeSut();
+      vi.mocked(prisma.user.findUnique).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.loadById(1)).rejects.toThrow();
+    });
   });
 });
