@@ -12,8 +12,11 @@ export const adaptMiddleware = (middleware: Middleware) => {
 
       const result = await middleware.handle(requestData);
 
+      const { accountId } = result.body;
+
       if (result.status === 200) {
-        req.body = result.body;
+        if (!result.body.accountId) req.body = result.body; //significa que n veio do checkAuthMiddleware. TODO: Preciso melhorar isso depois
+        if (accountId) req.userId = accountId;
         next();
       }
     } catch (error) {
