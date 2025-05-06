@@ -2,7 +2,7 @@ import { Authentication } from '../../../domain/use-cases/account/authentication
 import { UnauthorizedError } from '../../../shared/errors';
 import { Encrypter } from '../../protocols/cryptography/encrypter';
 import { HashComparer } from '../../protocols/cryptography/hash-comparer';
-import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
+import { LoadAccountByEmailRepository } from '../../protocols/account/load-account-by-email-repository';
 
 export class DbAuthentication implements Authentication {
   constructor(
@@ -26,7 +26,7 @@ export class DbAuthentication implements Authentication {
     if (!passwordMatches)
       throw new UnauthorizedError('incorrect email or password');
 
-    const accessToken = this.encrypter.encrypt(account.id);
+    const accessToken = this.encrypter.encrypt({ id: account.id });
 
     const { id, password, ...accountData } = account;
 

@@ -24,7 +24,7 @@ describe('JwtAdapter', () => {
 
       sut.encrypt(value);
 
-      expect(jwt.sign).toHaveBeenCalledWith({ value }, 'test_secret');
+      expect(jwt.sign).toHaveBeenCalledWith(value, 'test_secret');
     });
     test('should return value return by jwt.sign', async () => {
       const sut = makeSut();

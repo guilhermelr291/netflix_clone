@@ -137,7 +137,7 @@ describe('DbAuthentication', () => {
 
       await sut.auth(mockAuthenticationParams());
 
-      expect(encryptSpy).toHaveBeenCalledWith(mockAccount().id);
+      expect(encryptSpy).toHaveBeenCalledWith({ id: mockAccount().id });
     });
 
     test('should throw if Encrypter throws', async () => {
