@@ -21,5 +21,7 @@ export class AccountRepository
   }
   async loadById(id: number): Promise<AccountModel | null> {
     const account = await prisma.user.findUnique({ where: { id } });
+
+    return account;
   }
 }

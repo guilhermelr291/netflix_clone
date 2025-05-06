@@ -86,4 +86,14 @@ describe('AccountRepository', () => {
       expect(result).toEqual(mockAccount());
     });
   });
+  describe('loadById()', () => {
+    test('should call prisma.user.findUnique with correct value', async () => {
+      const sut = makeSut();
+      const findUniqueSpy = vi.mocked(prisma.user.findUnique);
+
+      await sut.loadById(1);
+
+      expect(findUniqueSpy).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
+  });
 });
