@@ -77,7 +77,7 @@ describe('AccountRepository', () => {
 
       expect(sut.loadByEmail(mockAddAccountParams().email)).rejects.toThrow();
     });
-    test('should return correct data', async () => {
+    test('should return correct data on success', async () => {
       const sut = makeSut();
 
       const { email } = mockAddAccountParams();
@@ -94,6 +94,14 @@ describe('AccountRepository', () => {
       await sut.loadById(1);
 
       expect(findUniqueSpy).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
+
+    test('should return correct data on success', async () => {
+      const sut = makeSut();
+
+      const result = await sut.loadById(1);
+
+      expect(result).toEqual(mockAccount());
     });
   });
 });
