@@ -77,5 +77,13 @@ describe('AccountRepository', () => {
 
       expect(sut.loadByEmail(mockAddAccountParams().email)).rejects.toThrow();
     });
+    test('should return correct data', async () => {
+      const sut = makeSut();
+
+      const { email } = mockAddAccountParams();
+      const result = await sut.loadByEmail(email);
+
+      expect(result).toEqual(mockAccount());
+    });
   });
 });
