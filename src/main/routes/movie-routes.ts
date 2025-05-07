@@ -5,10 +5,11 @@ import {
   makeAddMovieController,
   makeAddMovieDataValidationMiddleware,
 } from '../factories';
-import { makeCheckAuthMiddleware } from '../factories/middlewares/auth/check-auth-middleware-factory';
+
+import { adminAuth } from '../middlewares/admin-auth-middleware';
 
 export default (router: Router): void => {
-  router.use(adaptMiddleware(makeCheckAuthMiddleware()));
+  router.use(adminAuth);
 
   router.post(
     '/movies',
