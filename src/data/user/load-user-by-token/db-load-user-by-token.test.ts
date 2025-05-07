@@ -60,7 +60,7 @@ describe('DbLoadUserByToken', () => {
       const decryptSpy = vi.spyOn(decrypterStub, 'decrypt');
 
       const token = 'any_token';
-      await sut.loadByToken(token);
+      await sut.loadByToken(token, 'USER');
 
       expect(decryptSpy).toHaveBeenCalledWith(token);
     });
@@ -71,16 +71,16 @@ describe('DbLoadUserByToken', () => {
         throw new Error();
       });
 
-      expect(sut.loadByToken('any_token')).rejects.toThrow();
+      expect(sut.loadByToken('any_token', 'USER')).rejects.toThrow();
     });
     test('should call LoadUserById with correct id', async () => {
       const { sut, loadUserByIdRepositoryStub } = makeSut();
 
       const loadByIdSpy = vi.spyOn(loadUserByIdRepositoryStub, 'loadById');
 
-      await sut.loadByToken('any_token');
+      await sut.loadByToken('any_token', 'USER');
 
-      expect(loadByIdSpy).toHaveBeenCalledWith(1);
+      expect(loadByIdSpy).toHaveBeenCalledWith(1, 'USER');
     });
     test('should return null if LoadUserById returns null', async () => {
       const { sut, loadUserByIdRepositoryStub } = makeSut();
@@ -89,7 +89,7 @@ describe('DbLoadUserByToken', () => {
         null
       );
 
-      const user = await sut.loadByToken('any_token');
+      const user = await sut.loadByToken('any_token', 'USER');
 
       expect(user).toBeNull();
     });
@@ -102,12 +102,12 @@ describe('DbLoadUserByToken', () => {
         }
       );
 
-      expect(sut.loadByToken('any_token')).rejects.toThrow();
+      expect(sut.loadByToken('any_token', 'USER')).rejects.toThrow();
     });
     test('should return an user on success', async () => {
       const { sut } = makeSut();
 
-      const user = await sut.loadByToken('any_token');
+      const user = await sut.loadByToken('any_token', 'USER');
 
       expect(user).toEqual(mockUser());
     });

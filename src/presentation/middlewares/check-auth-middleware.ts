@@ -6,7 +6,10 @@ import { HttpResponse } from '../protocols/http';
 import { Middleware } from '../protocols/middleware';
 
 export class CheckAuth implements Middleware {
-  constructor(private readonly LoadUserByToken: LoadUserByToken) {}
+  constructor(
+    private readonly LoadUserByToken: LoadUserByToken,
+    private readonly role: string = 'USER'
+  ) {}
   async handle(request: CheckAuth.Params): Promise<HttpResponse> {
     try {
       const headers = request.headers;
@@ -14,7 +17,7 @@ export class CheckAuth implements Middleware {
       const token = headers?.authorization?.split(' ')[1];
       if (!token) throw new UnauthorizedError('Token not provided');
 
-      const user = await this.LoadUserByToken.loadByToken(token);
+      const user = await this.LoadUserByToken.loadByToken(token, this.role);
       if (!user) throw new UnauthorizedError();
 
       return ok({ userId: user?.id });

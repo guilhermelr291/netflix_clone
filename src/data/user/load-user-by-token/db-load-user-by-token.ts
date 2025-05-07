@@ -9,12 +9,12 @@ export class DbLoadUserByToken implements LoadUserByToken {
     private readonly decrypter: Decrypter
   ) {}
 
-  async loadByToken(token: string): Promise<UserModel | null> {
+  async loadByToken(token: string, role: string): Promise<UserModel | null> {
     const payload = this.decrypter.decrypt(token);
 
     const id = Number(payload.id);
 
-    const user = await this.loadUserByIdRepository.loadById(id);
+    const user = await this.loadUserByIdRepository.loadById(id, role);
 
     return user;
   }

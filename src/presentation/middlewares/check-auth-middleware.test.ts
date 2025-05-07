@@ -33,9 +33,10 @@ type SutTypes = {
   loadUserByTokenStub: LoadUserByToken;
 };
 
+const DEFAULT_ROLE = 'USER_ROLE';
 const makeSut = (): SutTypes => {
   const loadUserByTokenStub = makeLoadUserByToken();
-  const sut = new CheckAuth(loadUserByTokenStub);
+  const sut = new CheckAuth(loadUserByTokenStub, DEFAULT_ROLE);
 
   return { sut, loadUserByTokenStub };
 };
@@ -51,7 +52,8 @@ describe('CheckAuth', () => {
     await sut.handle(requestData);
 
     expect(loadByTokenSpy).toHaveBeenCalledWith(
-      requestData.headers.authorization.split(' ')[1]
+      requestData.headers.authorization.split(' ')[1],
+      DEFAULT_ROLE
     );
   });
   test('should throw UnauthorizedError if LoadUserByToken throws', async () => {

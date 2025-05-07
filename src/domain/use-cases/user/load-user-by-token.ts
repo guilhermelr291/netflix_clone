@@ -1,5 +1,5 @@
 import { UserModel } from '../../models/user';
 
 export interface LoadUserByToken {
-  loadByToken(token: string): Promise<UserModel | null>;
+  loadByToken(token: string, role: string): Promise<UserModel | null>;
 }
