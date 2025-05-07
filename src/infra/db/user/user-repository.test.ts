@@ -1,8 +1,8 @@
 import { vi, describe, test, expect } from 'vitest';
-import { AccountRepository } from './account-repository';
-import { AddAccount } from '../../../domain/use-cases/account/add-account';
+import { UserRepository } from './user-repository';
+import { AddUser } from '../../../domain/use-cases/user/add-user';
 import prisma from '../../../../prisma/db';
-import { AccountModel } from '../../../domain/models/account';
+import { UserModel } from '../../../domain/models/user';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
@@ -13,36 +13,38 @@ vi.mock('../../../../prisma/db', () => ({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
+        role: 'USER',
       }),
     },
   },
 }));
 
-const mockAddAccountParams = (): AddAccount.Params => ({
+const mockAddUserParams = (): AddUser.Params => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
 });
 
-const mockAccount = (): AccountModel => ({
+const mockUser = (): UserModel => ({
   id: 1,
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
+  role: 'USER',
 });
 
-const makeSut = (): AccountRepository => {
-  const sut = new AccountRepository();
+const makeSut = (): UserRepository => {
+  const sut = new UserRepository();
 
   return sut;
 };
 
-describe('AccountRepository', () => {
+describe('UserRepository', () => {
   describe('add()', () => {
     test('should call prisma with correct data', async () => {
       const sut = makeSut();
 
-      const data = mockAddAccountParams();
+      const data = mockAddUserParams();
       await sut.add(data);
 
       expect(prisma.user.create).toHaveBeenCalledWith({ data });
@@ -54,14 +56,14 @@ describe('AccountRepository', () => {
         throw new Error();
       });
 
-      expect(sut.add(mockAddAccountParams())).rejects.toThrow();
+      expect(sut.add(mockAddUserParams())).rejects.toThrow();
     });
   });
   describe('loadByEmail()', () => {
     test('should call prisma with correct data', async () => {
       const sut = makeSut();
 
-      const { email } = mockAddAccountParams();
+      const { email } = mockAddUserParams();
       await sut.loadByEmail(email);
 
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
@@ -75,15 +77,15 @@ describe('AccountRepository', () => {
         throw new Error();
       });
 
-      expect(sut.loadByEmail(mockAddAccountParams().email)).rejects.toThrow();
+      expect(sut.loadByEmail(mockAddUserParams().email)).rejects.toThrow();
     });
     test('should return correct data on success', async () => {
       const sut = makeSut();
 
-      const { email } = mockAddAccountParams();
+      const { email } = mockAddUserParams();
       const result = await sut.loadByEmail(email);
 
-      expect(result).toEqual(mockAccount());
+      expect(result).toEqual(mockUser());
     });
   });
   describe('loadById()', () => {
@@ -101,7 +103,7 @@ describe('AccountRepository', () => {
 
       const result = await sut.loadById(1);
 
-      expect(result).toEqual(mockAccount());
+      expect(result).toEqual(mockUser());
     });
     test('should throw if prisma  throws', async () => {
       const sut = makeSut();

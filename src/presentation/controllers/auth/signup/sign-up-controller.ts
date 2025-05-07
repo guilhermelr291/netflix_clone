@@ -1,6 +1,6 @@
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
-import { AddAccount } from '../../../../domain/use-cases/account/add-account';
+import { AddUser } from '../../../../domain/use-cases/user/add-user';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { BadRequestError } from '../../../../shared/errors';
 
@@ -8,7 +8,7 @@ import { created } from '../../../helpers/http-helper';
 
 export class SignUpController implements Controller {
   constructor(
-    private readonly addAccount: AddAccount,
+    private readonly addUser: AddUser,
     private readonly fieldComparer: FieldComparer
   ) {}
 
@@ -24,9 +24,9 @@ export class SignUpController implements Controller {
 
       const { name, email, password } = request;
 
-      await this.addAccount.add({ name, email, password });
+      await this.addUser.add({ name, email, password });
 
-      return created({ message: 'Account created successfully!' });
+      return created({ message: 'User created successfully!' });
     } catch (error) {
       console.log('Error on signUp: ', error);
       throw error;

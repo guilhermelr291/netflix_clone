@@ -1,10 +1,10 @@
 import { vi, test, describe, expect } from 'vitest';
 import { LoginController } from './login-controller';
-import { Authentication } from '../../../../domain/use-cases/account/authentication';
+import { Authentication } from '../../../../domain/use-cases/user/authentication';
 
 const mockAuthenticationResult = (): Authentication.Result => ({
   accessToken: 'any_token',
-  account: {
+  user: {
     name: 'any_name',
     email: 'any_email',
   },

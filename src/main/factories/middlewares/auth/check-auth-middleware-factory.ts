@@ -1,6 +1,6 @@
 import { CheckAuth } from '../../../../presentation/middlewares/check-auth-middleware';
-import { makeDbLoadAccountByToken } from '../../data/account/db-load-account-by-token';
+import { makeDbLoadUserByToken } from '../../data/user/db-load-user-by-token';
 
 export const makeCheckAuthMiddleware = (): CheckAuth => {
-  return new CheckAuth(makeDbLoadAccountByToken());
+  return new CheckAuth(makeDbLoadUserByToken());
 };

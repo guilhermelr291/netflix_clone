@@ -1,4 +1,4 @@
-import { Authentication } from '../../../../domain/use-cases/account/authentication';
+import { Authentication } from '../../../../domain/use-cases/user/authentication';
 import { ok } from '../../../helpers/http-helper';
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
@@ -10,9 +10,9 @@ export class LoginController implements Controller {
       const { email, password } = request;
       const data = { email, password };
 
-      const accessTokenAndAccount = await this.authentication.auth(data);
+      const accessTokenAndUser = await this.authentication.auth(data);
 
-      return ok(accessTokenAndAccount);
+      return ok(accessTokenAndUser);
     } catch (error) {
       console.error('Error on login: ', error);
       throw error;

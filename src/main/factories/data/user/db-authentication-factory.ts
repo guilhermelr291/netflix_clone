@@ -1,11 +1,11 @@
-import { DbAuthentication } from '../../../../data/account/authentication/db-authentication';
+import { DbAuthentication } from '../../../../data/user/authentication/db-authentication';
 import { makeEncrypter } from '../../infra/encrypter';
 import { makeHasher } from '../../infra/hasher';
-import { makeAccountRepository } from '../../infra/account-repository-factory';
+import { makeUserRepository } from '../../infra/user-repository-factory';
 
 export const makeAuthentication = (): DbAuthentication => {
   return new DbAuthentication(
-    makeAccountRepository(),
+    makeUserRepository(),
     makeHasher(),
     makeEncrypter()
   );

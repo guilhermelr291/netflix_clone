@@ -1,24 +1,25 @@
 import { vi, describe, test, expect } from 'vitest';
 import { CheckAuth } from './check-auth-middleware';
-import { LoadAccountByToken } from '../../domain/use-cases/account/load-account-by-token';
-import { AccountModel } from '../../domain/models/account';
+import { LoadUserByToken } from '../../domain/use-cases/user/load-user-by-token';
+import { UserModel } from '../../domain/models/user';
 import { UnauthorizedError } from '../../shared/errors';
 import { ok } from '../helpers/http-helper';
 
-const mockAccount = (): AccountModel => ({
+const mockUser = (): UserModel => ({
   id: 1,
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
+  role: 'USER',
 });
 
-const makeLoadAccountByToken = (): LoadAccountByToken => {
-  class LoadAccountByTokenStub implements LoadAccountByToken {
-    loadByToken(token: string): Promise<AccountModel | null> {
-      return new Promise(resolve => resolve(mockAccount()));
+const makeLoadUserByToken = (): LoadUserByToken => {
+  class LoadUserByTokenStub implements LoadUserByToken {
+    loadByToken(token: string): Promise<UserModel | null> {
+      return new Promise(resolve => resolve(mockUser()));
     }
   }
-  return new LoadAccountByTokenStub();
+  return new LoadUserByTokenStub();
 };
 
 const mockRequest = (): CheckAuth.Params => ({
@@ -29,21 +30,21 @@ const mockRequest = (): CheckAuth.Params => ({
 
 type SutTypes = {
   sut: CheckAuth;
-  loadAccountByTokenStub: LoadAccountByToken;
+  loadUserByTokenStub: LoadUserByToken;
 };
 
 const makeSut = (): SutTypes => {
-  const loadAccountByTokenStub = makeLoadAccountByToken();
-  const sut = new CheckAuth(loadAccountByTokenStub);
+  const loadUserByTokenStub = makeLoadUserByToken();
+  const sut = new CheckAuth(loadUserByTokenStub);
 
-  return { sut, loadAccountByTokenStub };
+  return { sut, loadUserByTokenStub };
 };
 
 describe('CheckAuth', () => {
-  test('should call LoadAccountByToken with correct values', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
+  test('should call LoadUserByToken with correct values', async () => {
+    const { sut, loadUserByTokenStub } = makeSut();
 
-    const loadByTokenSpy = vi.spyOn(loadAccountByTokenStub, 'loadByToken');
+    const loadByTokenSpy = vi.spyOn(loadUserByTokenStub, 'loadByToken');
 
     const requestData = mockRequest();
 
@@ -53,19 +54,17 @@ describe('CheckAuth', () => {
       requestData.headers.authorization.split(' ')[1]
     );
   });
-  test('should throw UnauthorizedError if LoadAccountByToken throws', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
+  test('should throw UnauthorizedError if LoadUserByToken throws', async () => {
+    const { sut, loadUserByTokenStub } = makeSut();
 
-    vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockImplementationOnce(
-      () => {
-        throw new Error();
-      }
-    );
+    vi.spyOn(loadUserByTokenStub, 'loadByToken').mockImplementationOnce(() => {
+      throw new Error();
+    });
 
     expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
   });
   test('should throw UnauthorizedError if token is not provided', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
+    const { sut, loadUserByTokenStub } = makeSut();
 
     expect(
       sut.handle({
@@ -75,18 +74,18 @@ describe('CheckAuth', () => {
       })
     ).rejects.toThrow(UnauthorizedError);
   });
-  test('should throw UnauthorizedError if LoadAccountByToken returns null', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut();
+  test('should throw UnauthorizedError if LoadUserByToken returns null', async () => {
+    const { sut, loadUserByTokenStub } = makeSut();
 
-    vi.spyOn(loadAccountByTokenStub, 'loadByToken').mockResolvedValueOnce(null);
+    vi.spyOn(loadUserByTokenStub, 'loadByToken').mockResolvedValueOnce(null);
 
     expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
   });
-  test('should return correct status and accountId on success', async () => {
+  test('should return correct status and userId on success', async () => {
     const { sut } = makeSut();
 
     const result = await sut.handle(mockRequest());
 
-    expect(result).toEqual(ok({ accountId: mockAccount().id }));
+    expect(result).toEqual(ok({ userId: mockUser().id }));
   });
 });

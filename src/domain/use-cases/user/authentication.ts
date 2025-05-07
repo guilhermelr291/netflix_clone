@@ -10,7 +10,7 @@ export namespace Authentication {
 
   export type Result = {
     accessToken: string;
-    account: {
+    user: {
       name: string;
       email: string;
     };

@@ -1,17 +1,17 @@
 import { vi, test, describe, expect } from 'vitest';
 import { SignUpController } from './sign-up-controller';
-import { AddAccount } from '../../../../domain/use-cases/account/add-account';
+import { AddUser } from '../../../../domain/use-cases/user/add-user';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { BadRequestError } from '../../../../shared/errors';
 
 import { created } from '../../../helpers/http-helper';
 
-const makeAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add(data: AddAccount.Params): Promise<void> {}
+const makeAddUser = (): AddUser => {
+  class AddUserStub implements AddUser {
+    async add(data: AddUser.Params): Promise<void> {}
   }
 
-  return new AddAccountStub();
+  return new AddUserStub();
 };
 
 const makeFieldComparer = (): FieldComparer => {
@@ -28,16 +28,16 @@ const makeFieldComparer = (): FieldComparer => {
 
 type SutTypes = {
   sut: SignUpController;
-  addAccountStub: AddAccount;
+  addUserStub: AddUser;
   fieldComparerStub: FieldComparer;
 };
 const makeSut = (): SutTypes => {
-  const addAccountStub = makeAddAccount();
+  const addUserStub = makeAddUser();
   const fieldComparerStub = makeFieldComparer();
 
-  const sut = new SignUpController(addAccountStub, fieldComparerStub);
+  const sut = new SignUpController(addUserStub, fieldComparerStub);
 
-  return { sut, addAccountStub, fieldComparerStub };
+  return { sut, addUserStub, fieldComparerStub };
 };
 
 const mockRequestParams = () => ({
@@ -69,10 +69,10 @@ describe('SignUpController', () => {
     );
   });
 
-  test('should call AddAccount with correct values', async () => {
-    const { sut, addAccountStub } = makeSut();
+  test('should call AddUser with correct values', async () => {
+    const { sut, addUserStub } = makeSut();
 
-    const addSpy = vi.spyOn(addAccountStub, 'add');
+    const addSpy = vi.spyOn(addUserStub, 'add');
 
     const request = mockRequestParams();
 
@@ -83,10 +83,10 @@ describe('SignUpController', () => {
     expect(addSpy).toHaveBeenCalledWith({ name, email, password });
   });
 
-  test('should throw if AddAccount throws', async () => {
-    const { sut, addAccountStub } = makeSut();
+  test('should throw if AddUser throws', async () => {
+    const { sut, addUserStub } = makeSut();
 
-    vi.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+    vi.spyOn(addUserStub, 'add').mockImplementationOnce(() => {
       throw new Error();
     });
 
@@ -97,8 +97,6 @@ describe('SignUpController', () => {
 
     const result = await sut.handle(mockRequestParams());
 
-    expect(result).toEqual(
-      created({ message: 'Account created successfully!' })
-    );
+    expect(result).toEqual(created({ message: 'User created successfully!' }));
   });
 });

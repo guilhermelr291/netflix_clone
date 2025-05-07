@@ -1,38 +1,36 @@
-import { Authentication } from '../../../domain/use-cases/account/authentication';
+import { Authentication } from '../../../domain/use-cases/user/authentication';
 import { UnauthorizedError } from '../../../shared/errors';
 import { Encrypter } from '../../protocols/cryptography/encrypter';
 import { HashComparer } from '../../protocols/cryptography/hash-comparer';
-import { LoadAccountByEmailRepository } from '../../protocols/account/load-account-by-email-repository';
+import { LoadUserByEmailRepository } from '../../protocols/user/load-user-by-email-repository';
 
 export class DbAuthentication implements Authentication {
   constructor(
-    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
+    private readonly loadUserByEmailRepository: LoadUserByEmailRepository,
     private readonly hashComparer: HashComparer,
     private readonly encrypter: Encrypter
   ) {}
 
   async auth(data: Authentication.Params): Promise<Authentication.Result> {
-    const account = await this.loadAccountByEmailRepository.loadByEmail(
-      data.email
-    );
+    const user = await this.loadUserByEmailRepository.loadByEmail(data.email);
 
-    if (!account) throw new UnauthorizedError('incorrect email or password');
+    if (!user) throw new UnauthorizedError('incorrect email or password');
 
     const passwordMatches = await this.hashComparer.compare(
       data.password,
-      account.password
+      user.password
     );
 
     if (!passwordMatches)
       throw new UnauthorizedError('incorrect email or password');
 
-    const accessToken = this.encrypter.encrypt({ id: account.id });
+    const accessToken = this.encrypter.encrypt({ id: user.id });
 
-    const { id, password, ...accountData } = account;
+    const { id, password, ...userData } = user;
 
     return {
       accessToken,
-      account: accountData,
+      user: userData,
     };
   }
 }

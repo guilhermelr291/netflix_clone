@@ -1,29 +1,28 @@
 import { describe, expect, test, vi } from 'vitest';
-import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository';
-import { AccountModel } from '../../../domain/models/account';
+import { UserModel } from '../../../domain/models/user';
 import { DbAuthentication } from './db-authentication';
-import { Authentication } from '../../../domain/use-cases/account/authentication';
+import { Authentication } from '../../../domain/use-cases/user/authentication';
 import { UnauthorizedError } from '../../../shared/errors';
 import { HashComparer } from '../../protocols/cryptography/hash-comparer';
 import { Encrypter } from '../../protocols/cryptography/encrypter';
+import { LoadUserByEmailRepository } from '../../protocols/user/load-user-by-email-repository';
 
-const mockAccount = (): AccountModel => ({
+const mockUser = (): UserModel => ({
   id: 1,
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
+  role: 'USER',
 });
 
-const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
-  class LoadAccountByEmailRepositoryStub
-    implements LoadAccountByEmailRepository
-  {
-    loadByEmail(email: string): Promise<AccountModel | null> {
-      return new Promise(resolve => resolve(mockAccount()));
+const makeLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
+  class LoadUserByEmailRepositoryStub implements LoadUserByEmailRepository {
+    loadByEmail(email: string): Promise<UserModel | null> {
+      return new Promise(resolve => resolve(mockUser()));
     }
   }
 
-  return new LoadAccountByEmailRepositoryStub();
+  return new LoadUserByEmailRepositoryStub();
 };
 
 const makeHashComparer = (): HashComparer => {
@@ -47,7 +46,7 @@ const makeEncrypter = (): Encrypter => {
 
 type SutTypes = {
   sut: DbAuthentication;
-  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
+  loadUserByEmailRepositoryStub: LoadUserByEmailRepository;
   hashComparerStub: HashComparer;
   encrypterStub: Encrypter;
 };
@@ -58,19 +57,19 @@ const mockAuthenticationParams = (): Authentication.Params => ({
 });
 
 const makeSut = (): SutTypes => {
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+  const loadUserByEmailRepositoryStub = makeLoadUserByEmailRepository();
   const hashComparerStub = makeHashComparer();
   const encrypterStub = makeEncrypter();
 
   const sut = new DbAuthentication(
-    loadAccountByEmailRepositoryStub,
+    loadUserByEmailRepositoryStub,
     hashComparerStub,
     encrypterStub
   );
 
   return {
     sut,
-    loadAccountByEmailRepositoryStub,
+    loadUserByEmailRepositoryStub,
     hashComparerStub,
     encrypterStub,
   };
@@ -78,11 +77,14 @@ const makeSut = (): SutTypes => {
 
 describe('DbAuthentication', () => {
   describe('auth()', () => {
-    test('should call LoadAccountByEmailRepository with correct value', async () => {
-      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    test('should call LoadUserByEmailRepository with correct value', async () => {
+      const {
+        sut,
+        loadUserByEmailRepositoryStub: loadUserByEmailRepositoryStub,
+      } = makeSut();
 
       const loadByEmailSpy = vi.spyOn(
-        loadAccountByEmailRepositoryStub,
+        loadUserByEmailRepositoryStub,
         'loadByEmail'
       );
 
@@ -92,11 +94,14 @@ describe('DbAuthentication', () => {
 
       expect(loadByEmailSpy).toHaveBeenCalledWith(authParams.email);
     });
-    test('should throw UnauthorizedError if LoadAccountByEmailRepository returns null', async () => {
-      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    test('should throw UnauthorizedError if LoadUserByEmailRepository returns null', async () => {
+      const {
+        sut,
+        loadUserByEmailRepositoryStub: loadUserByEmailRepositoryStub,
+      } = makeSut();
 
       vi.spyOn(
-        loadAccountByEmailRepositoryStub,
+        loadUserByEmailRepositoryStub,
         'loadByEmail'
       ).mockResolvedValueOnce(null);
 
@@ -115,7 +120,7 @@ describe('DbAuthentication', () => {
       await sut.auth(authParams);
 
       expect(compareSpy).toHaveBeenCalledWith(
-        mockAccount().password,
+        mockUser().password,
         authParams.password
       );
     });
@@ -137,7 +142,7 @@ describe('DbAuthentication', () => {
 
       await sut.auth(mockAuthenticationParams());
 
-      expect(encryptSpy).toHaveBeenCalledWith({ id: mockAccount().id });
+      expect(encryptSpy).toHaveBeenCalledWith({ id: mockUser().id });
     });
 
     test('should throw if Encrypter throws', async () => {
@@ -149,11 +154,14 @@ describe('DbAuthentication', () => {
 
       expect(sut.auth(mockAuthenticationParams())).rejects.toThrow();
     });
-    test('should throw if LoadAccountByEmailRepository throws', async () => {
-      const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    test('should throw if LoadUserByEmailRepository throws', async () => {
+      const {
+        sut,
+        loadUserByEmailRepositoryStub: loadUserByEmailRepositoryStub,
+      } = makeSut();
 
       vi.spyOn(
-        loadAccountByEmailRepositoryStub,
+        loadUserByEmailRepositoryStub,
         'loadByEmail'
       ).mockImplementationOnce(() => {
         throw new Error();
@@ -175,12 +183,12 @@ describe('DbAuthentication', () => {
 
       const result = await sut.auth(mockAuthenticationParams());
 
-      const account = mockAccount();
-      const { id, password, ...accountData } = account;
+      const user = mockUser();
+      const { id, password, ...userData } = user;
 
       expect(result).toEqual({
         accessToken: 'encrypted_value',
-        account: accountData,
+        user: userData,
       });
     });
   });
