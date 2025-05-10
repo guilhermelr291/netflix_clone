@@ -32,4 +32,14 @@ describe('DbDeleteMovie UseCase', () => {
     await sut.delete(id);
     expect(deleteByIdSpy).toHaveBeenCalledWith(id);
   });
+  test('Should throw if DeleteMovieRepository throws', async () => {
+    const { sut, deleteMovieRepositoryStub } = makeSut();
+    vi.spyOn(deleteMovieRepositoryStub, 'deleteById').mockImplementationOnce(
+      async () => {
+        throw new Error();
+      }
+    );
+
+    await expect(sut.delete(1)).rejects.toThrow();
+  });
 });
