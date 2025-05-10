@@ -32,4 +32,23 @@ model Movie {
   rating Float 
   releaseYear Int
   durationInMinutes Int
+
+  episodes Episode[]
+}
+
+
+model Episode {
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  episodeNumber Int
+  previewUrl String
+  url String
+  thumbnailUrl String
+  durationInMinutes Int
+  releaseDate DateTime
+
+
+  movieId Int
+  movie Movie @relation(fields: [movieId], references: [id])
 }
