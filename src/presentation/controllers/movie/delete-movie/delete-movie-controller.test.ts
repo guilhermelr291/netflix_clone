@@ -1,0 +1,39 @@
+import { vi, test, describe, expect, should } from 'vitest';
+import { DeleteMovie } from '../../../../domain/use-cases/movie/delete-movie';
+import { DeleteMovieController } from './delete-movie-controller';
+
+const makeDeleteMovie = (): DeleteMovie => {
+  class DeleteMovieStub implements DeleteMovie {
+    async delete(id: number): Promise<void> {}
+  }
+
+  return new DeleteMovieStub();
+};
+
+type SutTypes = {
+  sut: DeleteMovieController;
+  deleteMovieStub: DeleteMovie;
+};
+
+const makeSut = (): SutTypes => {
+  const deleteMovieStub = makeDeleteMovie();
+  const sut = new DeleteMovieController(deleteMovieStub);
+
+  return { sut, deleteMovieStub };
+};
+
+const mockRequestData = (): DeleteMovieController.Params => ({
+  id: 1,
+});
+
+describe('DeleteMovieController', () => {
+  test('should call deleteMovie with correct id', async () => {
+    const { sut, deleteMovieStub } = makeSut();
+    const deleteSpy = vi.spyOn(deleteMovieStub, 'delete');
+    const data = mockRequestData();
+
+    await sut.handle(data);
+
+    expect(deleteSpy).toHaveBeenCalledWith(data.id);
+  });
+});
