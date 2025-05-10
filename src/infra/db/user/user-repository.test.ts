@@ -113,5 +113,10 @@ describe('UserRepository', () => {
 
       await expect(sut.loadById(1)).rejects.toThrow();
     });
+    test('should return null if user is found but has a different role', async () => {
+      const sut = makeSut();
+      const result = await sut.loadById(1, 'ADMIN');
+      expect(result).toBeNull();
+    });
   });
 });
