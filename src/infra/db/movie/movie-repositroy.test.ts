@@ -26,6 +26,7 @@ vi.mock('../../../../prisma/db', () => ({
         releaseYear: 2023,
         durationInMinutes: 120,
       }),
+      delete: vi.fn(),
     },
   },
 }));
@@ -115,6 +116,15 @@ describe('MovieRepository', () => {
       const result = await sut.add(mockAddMovieParams());
 
       expect(result).toEqual(mockMovie());
+    });
+  });
+  describe('deleteById()', () => {
+    test('should call prisma with correct value', async () => {
+      const sut = makeSut();
+      const id = 1;
+      await sut.deleteById(id);
+
+      expect(prisma.movie.delete).toHaveBeenCalledWith({ where: { id } });
     });
   });
 });
