@@ -45,4 +45,14 @@ describe('DeleteMovieController', () => {
 
     expect(response).toEqual(ok({ message: 'movie deleted successfully' }));
   });
+  test('should throw if deleteMovie throws', async () => {
+    const { sut, deleteMovieStub } = makeSut();
+    vi.spyOn(deleteMovieStub, 'delete').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const data = mockRequestData();
+
+    await expect(sut.handle(data)).rejects.toThrow();
+  });
 });
