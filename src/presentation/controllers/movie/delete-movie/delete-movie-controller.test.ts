@@ -1,6 +1,7 @@
 import { vi, test, describe, expect, should } from 'vitest';
 import { DeleteMovie } from '../../../../domain/use-cases/movie/delete-movie';
 import { DeleteMovieController } from './delete-movie-controller';
+import { ok } from '../../../helpers/http-helper';
 
 const makeDeleteMovie = (): DeleteMovie => {
   class DeleteMovieStub implements DeleteMovie {
@@ -35,5 +36,13 @@ describe('DeleteMovieController', () => {
     await sut.handle(data);
 
     expect(deleteSpy).toHaveBeenCalledWith(data.id);
+  });
+  test('should return correct status and message on success', async () => {
+    const { sut } = makeSut();
+    const data = mockRequestData();
+
+    const response = await sut.handle(data);
+
+    expect(response).toEqual(ok({ message: 'movie deleted successfully' }));
   });
 });
