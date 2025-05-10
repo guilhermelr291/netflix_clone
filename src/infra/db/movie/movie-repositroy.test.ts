@@ -77,7 +77,7 @@ describe('MovieRepository', () => {
 
       const title = 'any_title';
 
-      expect(sut.loadByTitle(title)).rejects.toThrow();
+      await expect(sut.loadByTitle(title)).rejects.toThrow();
     });
     test('should return value returned by prisma on success', async () => {
       const sut = makeSut();
@@ -107,7 +107,7 @@ describe('MovieRepository', () => {
         throw new Error();
       });
 
-      expect(sut.add(mockAddMovieParams())).rejects.toThrow();
+      await expect(sut.add(mockAddMovieParams())).rejects.toThrow();
     });
 
     test('should return value returned by prisma on success', async () => {
@@ -125,6 +125,16 @@ describe('MovieRepository', () => {
       await sut.deleteById(id);
 
       expect(prisma.movie.delete).toHaveBeenCalledWith({ where: { id } });
+    });
+
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.movie.delete).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.deleteById(1)).rejects.toThrow();
     });
   });
 });
