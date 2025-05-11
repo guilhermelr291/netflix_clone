@@ -8,14 +8,21 @@ import {
 } from '../factories';
 
 import { adminAuth } from '../middlewares/admin-auth-middleware';
+import { makeLoadMoviesController } from '../factories/presentation/movie/load-movies-controller-factory';
+import { auth } from '../middlewares/auth-middleware';
 
 export default (router: Router): void => {
-  router.use(adminAuth);
-
   router.post(
     '/movies',
+    adminAuth,
     adaptMiddleware(makeAddMovieDataValidationMiddleware()),
     adaptRoute(makeAddMovieController())
   );
-  router.delete('/movies/:id', adaptRoute(makeDeleteMovieController()));
+  router.delete(
+    '/movies/:id',
+    adminAuth,
+    adaptRoute(makeDeleteMovieController())
+  );
+
+  router.get('/movies', auth, adaptRoute(makeLoadMoviesController()));
 };
