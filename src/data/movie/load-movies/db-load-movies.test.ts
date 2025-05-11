@@ -54,4 +54,9 @@ describe('DbLoadMovies', () => {
     await sut.loadAll();
     expect(loadAllSpy).toHaveBeenCalledTimes(1);
   });
+  test('should return value returned by LoadMoviesRepository on success', async () => {
+    const { sut } = makeSut();
+    const movies = await sut.loadAll();
+    expect(movies).toEqual([mockMovie(), mockAnotherMovie()]);
+  });
 });
