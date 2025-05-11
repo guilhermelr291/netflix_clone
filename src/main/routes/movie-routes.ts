@@ -4,6 +4,7 @@ import { adaptMiddleware } from '../adapters/express-middleware-adapter';
 import {
   makeAddMovieController,
   makeAddMovieDataValidationMiddleware,
+  makeDeleteMovieController,
 } from '../factories';
 
 import { adminAuth } from '../middlewares/admin-auth-middleware';
@@ -16,4 +17,5 @@ export default (router: Router): void => {
     adaptMiddleware(makeAddMovieDataValidationMiddleware()),
     adaptRoute(makeAddMovieController())
   );
+  router.delete('/movies/:id', adaptRoute(makeDeleteMovieController()));
 };
