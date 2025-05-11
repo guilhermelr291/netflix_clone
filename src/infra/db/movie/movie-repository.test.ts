@@ -189,5 +189,14 @@ describe('MovieRepository', () => {
 
       expect(prisma.movie.findMany).toHaveBeenCalled();
     });
+    test('should throw if prisma throws', async () => {
+      const sut = makeSut();
+
+      vi.mocked(prisma.movie.findMany).mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.loadAll()).rejects.toThrow();
+    });
   });
 });
