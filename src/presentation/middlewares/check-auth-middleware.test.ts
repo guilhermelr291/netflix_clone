@@ -66,7 +66,7 @@ describe('CheckAuth', () => {
     expect(sut.handle(mockRequest())).rejects.toThrow(UnauthorizedError);
   });
   test('should throw UnauthorizedError if token is not provided', async () => {
-    const { sut, loadUserByTokenStub } = makeSut();
+    const { sut } = makeSut();
 
     expect(
       sut.handle({

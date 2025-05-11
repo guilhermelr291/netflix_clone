@@ -8,7 +8,7 @@ import { Middleware } from '../protocols/middleware';
 export class CheckAuth implements Middleware {
   constructor(
     private readonly LoadUserByToken: LoadUserByToken,
-    private readonly role: string = 'USER'
+    private readonly role?: string
   ) {}
   async handle(request: CheckAuth.Params): Promise<HttpResponse> {
     try {
