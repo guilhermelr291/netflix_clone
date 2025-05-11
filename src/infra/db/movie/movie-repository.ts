@@ -5,13 +5,15 @@ import { LoadMovieByIdRepository } from '../../../data/protocols/movie/load-movi
 import { LoadMovieByTitleRepository } from '../../../data/protocols/movie/load-movie-by-title-repository';
 import { Movie } from '../../../domain/models/movie';
 import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
+import { loadMovies } from '../../../domain/use-cases/movie/load-movies';
 
 export class MovieRepository
   implements
     LoadMovieByTitleRepository,
     AddMovieRepository,
     DeleteMovieRepository,
-    LoadMovieByIdRepository
+    LoadMovieByIdRepository,
+    loadMovies
 {
   async loadByTitle(title: string): Promise<Movie | null> {
     const movie = await prisma.movie.findUnique({ where: { title } });
@@ -30,5 +32,8 @@ export class MovieRepository
 
   async loadById(id: number): Promise<Movie | null> {
     return await prisma.movie.findUnique({ where: { id } });
+  }
+  async loadAll(): Promise<Movie[]> {
+    return await prisma.movie.findMany();
   }
 }
