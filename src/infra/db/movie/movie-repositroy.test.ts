@@ -137,4 +137,17 @@ describe('MovieRepository', () => {
       await expect(sut.deleteById(1)).rejects.toThrow();
     });
   });
+
+  describe('loadById()', () => {
+    test('should call prisma with correct value', async () => {
+      const sut = makeSut();
+
+      const id = 1;
+      await sut.loadById(id);
+
+      expect(prisma.movie.findUnique).toHaveBeenCalledWith({
+        where: { id },
+      });
+    });
+  });
 });
