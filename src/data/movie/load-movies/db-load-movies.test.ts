@@ -59,4 +59,12 @@ describe('DbLoadMovies', () => {
     const movies = await sut.loadAll();
     expect(movies).toEqual([mockMovie(), mockAnotherMovie()]);
   });
+  test('should throw if LoadMoviesRepository throws', async () => {
+    const { sut, loadMoviesRepositoryStub } = makeSut();
+    vi.spyOn(loadMoviesRepositoryStub, 'loadAll').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.loadAll()).rejects.toThrow();
+  });
 });
