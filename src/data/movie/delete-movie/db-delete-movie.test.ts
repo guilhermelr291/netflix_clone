@@ -88,4 +88,15 @@ describe('DbDeleteMovie UseCase', () => {
       new NotFoundError('Movie not found')
     );
   });
+
+  test('Should throw if LoadMovieByIdRepository throws', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadMovieByIdRepositoryStub, 'loadById').mockImplementationOnce(
+      async () => {
+        throw new Error();
+      }
+    );
+
+    await expect(sut.delete(1)).rejects.toThrow();
+  });
 });
