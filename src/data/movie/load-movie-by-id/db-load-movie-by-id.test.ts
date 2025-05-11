@@ -62,4 +62,12 @@ describe('DbLoadMovieById', () => {
       new NotFoundError('Movie not found')
     );
   });
+  test('should throw if LoadMovieByIdRepository throws', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadMovieByIdRepositoryStub, 'loadById').mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.loadById(1)).rejects.toThrow(new Error());
+  });
 });
