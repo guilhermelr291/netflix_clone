@@ -198,5 +198,12 @@ describe('MovieRepository', () => {
 
       await expect(sut.loadAll()).rejects.toThrow();
     });
+    test('should return value returned by prisma on success', async () => {
+      const sut = makeSut();
+
+      const result = await sut.loadAll();
+
+      expect(result).toEqual([mockMovie()]);
+    });
   });
 });
