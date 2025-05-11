@@ -45,4 +45,10 @@ describe('DbLoadMovieById', () => {
     await sut.loadById(id);
     expect(loadByIdSpy).toHaveBeenCalledWith(id);
   });
+  test('should return a movie on success', async () => {
+    const { sut } = makeSut();
+    const id = 1;
+    const movie = await sut.loadById(id);
+    expect(movie).toEqual(mockMovie());
+  });
 });
