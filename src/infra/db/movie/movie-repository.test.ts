@@ -27,6 +27,18 @@ vi.mock('../../../../prisma/db', () => ({
         durationInMinutes: 120,
       }),
       delete: vi.fn(),
+      findMany: vi.fn().mockResolvedValue([
+        {
+          id: 1,
+          title: 'Fake Movie',
+          previewUrl: 'http://example.com/preview',
+          thumbnailUrl: 'http://example.com/thumbnail',
+          description: 'This is a fake movie description.',
+          rating: 4.5,
+          releaseYear: 2023,
+          durationInMinutes: 120,
+        },
+      ]),
     },
   },
 }));
@@ -166,6 +178,16 @@ describe('MovieRepository', () => {
       const result = await sut.loadById(1);
 
       expect(result).toEqual(mockMovie());
+    });
+  });
+
+  describe('loadAll()', () => {
+    test('should call prisma.findMany', async () => {
+      const sut = makeSut();
+
+      await sut.loadAll();
+
+      expect(prisma.movie.findMany).toHaveBeenCalled();
     });
   });
 });
