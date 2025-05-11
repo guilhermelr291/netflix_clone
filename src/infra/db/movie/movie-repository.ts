@@ -3,9 +3,9 @@ import { AddMovieRepository } from '../../../data/protocols/movie/add-movie-repo
 import { DeleteMovieRepository } from '../../../data/protocols/movie/delete-movie-repository';
 import { LoadMovieByIdRepository } from '../../../data/protocols/movie/load-movie-by-id-repository';
 import { LoadMovieByTitleRepository } from '../../../data/protocols/movie/load-movie-by-title-repository';
+import { LoadMoviesRepository } from '../../../data/protocols/movie/load-movies-repository';
 import { Movie } from '../../../domain/models/movie';
 import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
-import { loadMovies } from '../../../domain/use-cases/movie/load-movies';
 
 export class MovieRepository
   implements
@@ -13,7 +13,7 @@ export class MovieRepository
     AddMovieRepository,
     DeleteMovieRepository,
     LoadMovieByIdRepository,
-    loadMovies
+    LoadMoviesRepository
 {
   async loadByTitle(title: string): Promise<Movie | null> {
     const movie = await prisma.movie.findUnique({ where: { title } });
