@@ -2,5 +2,6 @@ import { DbDeleteMovie } from '../../../../data/movie/delete-movie/db-delete-mov
 import { makeMovieRepository } from '../../infra';
 
 export const makeDbDeleteMovie = (): DbDeleteMovie => {
-  return new DbDeleteMovie(makeMovieRepository());
+  const movieRepository = makeMovieRepository();
+  return new DbDeleteMovie(movieRepository, movieRepository);
 };
