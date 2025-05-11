@@ -4,6 +4,7 @@ import { DeleteMovieRepository } from '../../protocols/movie/delete-movie-reposi
 import { DeleteMovie } from '../../../domain/use-cases/movie/delete-movie';
 import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
 import { Movie } from '../../../domain/models/movie';
+import { NotFoundError } from '../../../shared/errors';
 
 const makeDeleteMovieRepository = () => {
   class DeleteMovieRepositoryStub implements DeleteMovieRepository {
@@ -76,5 +77,15 @@ describe('DbDeleteMovie UseCase', () => {
     const id = 1;
     await sut.delete(id);
     expect(loadByIdSpy).toHaveBeenCalledWith(id);
+  });
+  test('Should throw if LoadMovieByIdRepository returns null', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadMovieByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+      null
+    );
+
+    await expect(sut.delete(1)).rejects.toThrow(
+      new NotFoundError('Movie not found')
+    );
   });
 });
