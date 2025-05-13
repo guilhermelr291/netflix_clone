@@ -3,7 +3,7 @@ import { LoadMovieById } from '../../../../domain/use-cases/movie/load-movie-by-
 import { LoadMovieByIdController } from './load-movie-by-id-controller';
 import { ok } from '../../../helpers/http-helper';
 import { Movie } from '../../../../domain/models/movie';
-import { mockMovie } from '../../../../__tests__/factories/movie/movie-factory';
+import { mockMovie } from '../../../../__tests__/factories/movie/models-factory';
 import { makeLoadMovieById } from '../../../../__tests__/factories/movie/domain-factory';
 
 type SutTypes = {

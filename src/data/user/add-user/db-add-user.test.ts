@@ -1,11 +1,13 @@
 import { describe, expect, test, vi } from 'vitest';
 import { Hasher } from '../../protocols/cryptography/hasher';
 import { DbAddUser } from './db-add-user';
-import { AddUser } from '../../../domain/use-cases/user/add-user';
 import { LoadUserByEmailRepository } from '../../protocols/user/load-user-by-email-repository';
-import { UserModel } from '../../../domain/models/user';
 import { UnprocessableEntityError } from '../../../shared/errors';
 import { AddUserRepository } from '../../protocols/user/add-user-repository';
+import { mockUser } from '../../../__tests__/factories/user/models-factory';
+import { makeAddUserRepository } from '../../../__tests__/factories/user/infra-factory';
+import { mockAddUserParams } from '../../../__tests__/factories/user/request-params';
+import { UserModel } from '../../../domain/models/user';
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -16,6 +18,7 @@ const makeHasher = (): Hasher => {
 
   return new HasherStub();
 };
+
 const makeLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
   class LoadUserByEmailRepositoryStub implements LoadUserByEmailRepository {
     loadByEmail(email: string): Promise<UserModel | null> {
@@ -25,13 +28,6 @@ const makeLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
 
   return new LoadUserByEmailRepositoryStub();
 };
-const makeAddUserRepository = (): AddUserRepository => {
-  class AddUserRepositoryStub implements AddUserRepository {
-    async add(data: AddUser.Params): Promise<void> {}
-  }
-
-  return new AddUserRepositoryStub();
-};
 
 type SutTypes = {
   sut: DbAddUser;
@@ -39,20 +35,6 @@ type SutTypes = {
   loadUserByEmailRepositoryStub: LoadUserByEmailRepository;
   addUserRepositoryStub: AddUserRepository;
 };
-
-const mockAddUserParams = (): AddUser.Params => ({
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-});
-
-const mockUser = (): UserModel => ({
-  id: 1,
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  role: 'USER',
-});
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher();

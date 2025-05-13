@@ -2,7 +2,7 @@ import { vi, describe, expect, test } from 'vitest';
 import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
 import { DbLoadMovieById } from './db-load-movie-by-id';
 import { NotFoundError } from '../../../shared/errors';
-import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { mockMovie } from '../../../__tests__/factories/movie/models-factory';
 import { makeLoadMovieByIdRepository } from '../../../__tests__/factories/movie/infra-factory';
 
 type SutTypes = {

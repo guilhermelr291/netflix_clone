@@ -3,7 +3,7 @@ import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
 import { DeleteMovie } from '../../../domain/use-cases/movie/delete-movie';
 import { LoadMovieById } from '../../../domain/use-cases/movie/load-movie-by-id';
 import { LoadMovies } from '../../../domain/use-cases/movie/load-movies';
-import { mockMovie, mockMoviesModel } from './movie-factory';
+import { mockMovie, mockMoviesModel } from './models-factory';
 
 export const makeAddMovie = (): AddMovie => {
   class AddMovieStub implements AddMovie {

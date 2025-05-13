@@ -5,7 +5,7 @@ import { Movie } from '../../../domain/models/movie';
 import { ConflictError } from '../../../shared/errors';
 import { AddMovieRepository } from '../../protocols/movie/add-movie-repository';
 import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
-import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { mockMovie } from '../../../__tests__/factories/movie/models-factory';
 import {
   makeAddMovieByRepository,
   makeLoadMovieByTitleRepository,

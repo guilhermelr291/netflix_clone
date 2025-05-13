@@ -3,16 +3,9 @@ import { SignUpController } from './sign-up-controller';
 import { AddUser } from '../../../../domain/use-cases/user/add-user';
 import { FieldComparer } from '../../../protocols/field-comparer';
 import { BadRequestError } from '../../../../shared/errors';
-
 import { created } from '../../../helpers/http-helper';
-
-const makeAddUser = (): AddUser => {
-  class AddUserStub implements AddUser {
-    async add(data: AddUser.Params): Promise<void> {}
-  }
-
-  return new AddUserStub();
-};
+import { makeAddUser } from '../../../../__tests__/factories/user/domain-factory';
+import { mockSignUpRequestParams } from '../../../../__tests__/factories/user/request-params';
 
 const makeFieldComparer = (): FieldComparer => {
   class FieldComparerStub implements FieldComparer {
@@ -40,20 +33,13 @@ const makeSut = (): SutTypes => {
   return { sut, addUserStub, fieldComparerStub };
 };
 
-const mockRequestParams = () => ({
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  passwordConfirmation: 'any_password',
-});
-
 describe('SignUpController', () => {
   test('should call FieldComparer with correct values', async () => {
     const { sut, fieldComparerStub } = makeSut();
 
     const compareSpy = vi.spyOn(fieldComparerStub, 'compare');
 
-    const request = mockRequestParams();
+    const request = mockSignUpRequestParams();
 
     await sut.handle(request);
 
@@ -64,7 +50,7 @@ describe('SignUpController', () => {
 
     vi.spyOn(fieldComparerStub, 'compare').mockReturnValueOnce(false);
 
-    await expect(sut.handle(mockRequestParams())).rejects.toThrow(
+    await expect(sut.handle(mockSignUpRequestParams())).rejects.toThrow(
       BadRequestError
     );
   });
@@ -74,7 +60,7 @@ describe('SignUpController', () => {
 
     const addSpy = vi.spyOn(addUserStub, 'add');
 
-    const request = mockRequestParams();
+    const request = mockSignUpRequestParams();
 
     await sut.handle(request);
 
@@ -90,12 +76,12 @@ describe('SignUpController', () => {
       throw new Error();
     });
 
-    await expect(sut.handle(mockRequestParams())).rejects.toThrow();
+    await expect(sut.handle(mockSignUpRequestParams())).rejects.toThrow();
   });
   test('should return status 201 and success message on success', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.handle(mockRequestParams());
+    const result = await sut.handle(mockSignUpRequestParams());
 
     expect(result).toEqual(created({ message: 'User created successfully!' }));
   });

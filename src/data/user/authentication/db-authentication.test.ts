@@ -1,29 +1,13 @@
 import { describe, expect, test, vi } from 'vitest';
-import { UserModel } from '../../../domain/models/user';
 import { DbAuthentication } from './db-authentication';
-import { Authentication } from '../../../domain/use-cases/user/authentication';
+
 import { UnauthorizedError } from '../../../shared/errors';
 import { HashComparer } from '../../protocols/cryptography/hash-comparer';
 import { Encrypter } from '../../protocols/cryptography/encrypter';
 import { LoadUserByEmailRepository } from '../../protocols/user/load-user-by-email-repository';
-
-const mockUser = (): UserModel => ({
-  id: 1,
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  role: 'USER',
-});
-
-const makeLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
-  class LoadUserByEmailRepositoryStub implements LoadUserByEmailRepository {
-    loadByEmail(email: string): Promise<UserModel | null> {
-      return new Promise(resolve => resolve(mockUser()));
-    }
-  }
-
-  return new LoadUserByEmailRepositoryStub();
-};
+import { mockUser } from '../../../__tests__/factories/user/models-factory';
+import { makeLoadUserByEmailRepository } from '../../../__tests__/factories/user/infra-factory';
+import { mockAuthenticationParams } from '../../../__tests__/factories/user/request-params';
 
 const makeHashComparer = (): HashComparer => {
   class HashComparerStub implements HashComparer {
@@ -50,11 +34,6 @@ type SutTypes = {
   hashComparerStub: HashComparer;
   encrypterStub: Encrypter;
 };
-
-const mockAuthenticationParams = (): Authentication.Params => ({
-  email: 'any_email@mail.com',
-  password: 'any_password',
-});
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = makeLoadUserByEmailRepository();

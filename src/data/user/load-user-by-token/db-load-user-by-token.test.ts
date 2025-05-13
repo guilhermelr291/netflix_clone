@@ -3,6 +3,8 @@ import { UserModel } from '../../../domain/models/user';
 import { LoadUserByIdRepository } from '../../protocols/user/load-user-by-id-repository';
 import { Decrypter } from '../../protocols/cryptography/decrypter';
 import { DbLoadUserByToken } from './db-load-user-by-token';
+import { mockUser } from '../../../__tests__/factories/user/models-factory';
+import { makeLoadUserByIdRepository } from '../../../__tests__/factories/user/infra-factory';
 
 const makeDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {
@@ -14,29 +16,11 @@ const makeDecrypter = (): Decrypter => {
   return new DecrypterStub();
 };
 
-const makeLoadUserByIdRepository = (): LoadUserByIdRepository => {
-  class LoadUserByIdRepositoryStub implements LoadUserByIdRepository {
-    loadById(id: number): Promise<UserModel | null> {
-      return new Promise(resolve => resolve(mockUser()));
-    }
-  }
-
-  return new LoadUserByIdRepositoryStub();
-};
-
 type SutTypes = {
   sut: DbLoadUserByToken;
   decrypterStub: Decrypter;
   loadUserByIdRepositoryStub: LoadUserByIdRepository;
 };
-
-const mockUser = (): UserModel => ({
-  id: 1,
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'hashed_password',
-  role: 'USER',
-});
 
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypter();

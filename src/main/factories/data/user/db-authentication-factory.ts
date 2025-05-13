@@ -3,7 +3,7 @@ import { makeEncrypter } from '../../infra/encrypter';
 import { makeHasher } from '../../infra/hasher';
 import { makeUserRepository } from '../../infra/user-repository-factory';
 
-export const makeAuthentication = (): DbAuthentication => {
+export const makeDbAuthentication = (): DbAuthentication => {
   return new DbAuthentication(
     makeUserRepository(),
     makeHasher(),

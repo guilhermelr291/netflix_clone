@@ -3,6 +3,8 @@ import { UserRepository } from './user-repository';
 import { AddUser } from '../../../domain/use-cases/user/add-user';
 import prisma from '../../../../prisma/db';
 import { UserModel } from '../../../domain/models/user';
+import { mockUser } from '../../../__tests__/factories/user/models-factory';
+import { mockAddUserParams } from '../../../__tests__/factories/user/request-params';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
@@ -18,20 +20,6 @@ vi.mock('../../../../prisma/db', () => ({
     },
   },
 }));
-
-const mockAddUserParams = (): AddUser.Params => ({
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-});
-
-const mockUser = (): UserModel => ({
-  id: 1,
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  role: 'USER',
-});
 
 const makeSut = (): UserRepository => {
   const sut = new UserRepository();

@@ -2,7 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { LoadMoviesRepository } from '../../protocols/movie/load-movies-repository';
 import { Movie } from '../../../domain/models/movie';
 import { DbLoadMovies } from './db-load-movies';
-import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { mockMovie } from '../../../__tests__/factories/movie/models-factory';
 
 const mockAnotherMovie = (): Movie => ({
   id: 2,

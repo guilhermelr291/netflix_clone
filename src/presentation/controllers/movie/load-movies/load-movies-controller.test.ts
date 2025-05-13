@@ -3,7 +3,7 @@ import { LoadMovies } from '../../../../domain/use-cases/movie/load-movies';
 import { LoadMoviesController } from './load-movies-controller';
 import { ok } from '../../../helpers/http-helper';
 import { makeLoadMovies } from '../../../../__tests__/factories/movie/domain-factory';
-import { mockMoviesModel } from '../../../../__tests__/factories/movie/movie-factory';
+import { mockMoviesModel } from '../../../../__tests__/factories/movie/models-factory';
 
 type SutTypes = {
   sut: LoadMoviesController;

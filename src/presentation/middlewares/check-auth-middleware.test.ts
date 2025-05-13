@@ -4,14 +4,7 @@ import { LoadUserByToken } from '../../domain/use-cases/user/load-user-by-token'
 import { UserModel } from '../../domain/models/user';
 import { UnauthorizedError } from '../../shared/errors';
 import { ok } from '../helpers/http-helper';
-
-const mockUser = (): UserModel => ({
-  id: 1,
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password',
-  role: 'USER',
-});
+import { mockUser } from '../../__tests__/factories/user/models-factory';
 
 const makeLoadUserByToken = (): LoadUserByToken => {
   class LoadUserByTokenStub implements LoadUserByToken {

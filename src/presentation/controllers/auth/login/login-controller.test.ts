@@ -1,34 +1,14 @@
 import { vi, test, describe, expect } from 'vitest';
 import { LoginController } from './login-controller';
 import { Authentication } from '../../../../domain/use-cases/user/authentication';
-
-const mockAuthenticationResult = (): Authentication.Result => ({
-  accessToken: 'any_token',
-  user: {
-    name: 'any_name',
-    email: 'any_email',
-  },
-});
-
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    auth(data: Authentication.Params): Promise<Authentication.Result> {
-      return new Promise(resolve => resolve(mockAuthenticationResult()));
-    }
-  }
-
-  return new AuthenticationStub();
-};
+import { mockAuthenticationResult } from '../../../../__tests__/factories/user/models-factory';
+import { makeAuthentication } from '../../../../__tests__/factories/user/domain-factory';
+import { mockAuthenticationParams } from '../../../../__tests__/factories/user/request-params';
 
 type sutTypes = {
   sut: LoginController;
   authenticationStub: Authentication;
 };
-
-const mockRequestData = (): Authentication.Params => ({
-  email: 'any_email@mail.com',
-  password: 'any_password',
-});
 
 const makeSut = (): sutTypes => {
   const authenticationStub = makeAuthentication();
@@ -43,7 +23,7 @@ describe('LoginController', () => {
 
     const authSpy = vi.spyOn(authenticationStub, 'auth');
 
-    const requestData = mockRequestData();
+    const requestData = mockAuthenticationParams();
 
     await sut.handle(requestData);
 
@@ -56,12 +36,12 @@ describe('LoginController', () => {
       throw new Error();
     });
 
-    expect(sut.handle(mockRequestData())).rejects.toThrow();
+    expect(sut.handle(mockAuthenticationParams())).rejects.toThrow();
   });
   test('should return correct values on success', async () => {
     const { sut } = makeSut();
 
-    const result = await sut.handle(mockRequestData());
+    const result = await sut.handle(mockAuthenticationParams());
 
     expect(result).toEqual({ status: 200, body: mockAuthenticationResult() });
   });

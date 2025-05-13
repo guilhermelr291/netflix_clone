@@ -4,7 +4,7 @@ import { DeleteMovieRepository } from '../../../data/protocols/movie/delete-movi
 import { LoadMovieByIdRepository } from '../../../data/protocols/movie/load-movie-by-id-repository';
 import { LoadMovieByTitleRepository } from '../../../data/protocols/movie/load-movie-by-title-repository';
 import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
-import { mockMovie } from './movie-factory';
+import { mockMovie } from './models-factory';
 
 export const makeLoadMovieByIdRepository = () => {
   class LoadMovieByIdRepositoryStub implements LoadMovieByIdRepository {

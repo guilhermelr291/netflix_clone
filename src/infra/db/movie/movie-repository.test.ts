@@ -2,7 +2,7 @@ import { vi, test, describe, expect } from 'vitest';
 import { Movie } from '../../../domain/models/movie';
 import prisma from '../../../../prisma/db';
 import { MovieRepository } from './movie-repository';
-import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { mockMovie } from '../../../__tests__/factories/movie/models-factory';
 import { mockAddMovieParams } from '../../../__tests__/factories/movie/request-params-factory';
 
 vi.mock('../../../../prisma/db', () => ({
