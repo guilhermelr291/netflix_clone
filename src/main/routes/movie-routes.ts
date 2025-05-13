@@ -5,6 +5,7 @@ import {
   makeAddMovieController,
   makeAddMovieDataValidationMiddleware,
   makeDeleteMovieController,
+  makeLoadMovieByIdController,
 } from '../factories';
 
 import { adminAuth } from '../middlewares/admin-auth-middleware';
@@ -25,4 +26,6 @@ export default (router: Router): void => {
   );
 
   router.get('/movies', auth, adaptRoute(makeLoadMoviesController()));
+
+  router.get('/movies/:id', auth, adaptRoute(makeLoadMovieByIdController()));
 };
