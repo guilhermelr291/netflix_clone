@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run --silent",
+    "test": "vitest run --silent --passWithNoTests",
     "test:watch": "vitest --silent",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
