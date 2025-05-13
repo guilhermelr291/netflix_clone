@@ -3,27 +3,8 @@ import { LoadMovieById } from '../../../../domain/use-cases/movie/load-movie-by-
 import { LoadMovieByIdController } from './load-movie-by-id-controller';
 import { ok } from '../../../helpers/http-helper';
 import { Movie } from '../../../../domain/models/movie';
-
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const makeLoadMovieById = (): LoadMovieById => {
-  class LoadMovieByIdStub implements LoadMovieById {
-    async loadById(id: number): Promise<any> {
-      return mockMovie();
-    }
-  }
-
-  return new LoadMovieByIdStub();
-};
+import { mockMovie } from '../../../../__tests__/factories/movie/movie-factory';
+import { makeLoadMovieById } from '../../../../__tests__/factories/movie/domain-factory';
 
 type SutTypes = {
   sut: LoadMovieByIdController;

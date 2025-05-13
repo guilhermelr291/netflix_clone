@@ -1,52 +1,13 @@
 import { vi, test, describe, expect } from 'vitest';
-import { loadMovies } from '../../../../domain/use-cases/movie/load-movies';
+import { LoadMovies } from '../../../../domain/use-cases/movie/load-movies';
 import { LoadMoviesController } from './load-movies-controller';
 import { ok } from '../../../helpers/http-helper';
-
-const mockMoviesModel = () => [
-  {
-    id: 1,
-    title: 'Test Movie 1',
-    previewUrl: 'http://example.com/preview1',
-    thumbnailUrl: 'http://example.com/thumbnail1',
-    description: 'A test movie description',
-    rating: 4.5,
-    releaseYear: 2023,
-    duration: 120,
-    favorites: [],
-    cast: [],
-    episodes: [],
-    genres: [],
-  },
-  {
-    id: 2,
-    title: 'Test Movie 2',
-    previewUrl: 'http://example.com/preview2',
-    thumbnailUrl: 'http://example.com/thumbnail2',
-    description: 'Another test movie description',
-    rating: 3.8,
-    releaseYear: 2022,
-    duration: 105,
-    favorites: [],
-    cast: [],
-    episodes: [],
-    genres: [],
-  },
-];
-
-const makeLoadMovies = (): loadMovies => {
-  class LoadMoviesStub implements loadMovies {
-    async loadAll(): Promise<any[]> {
-      return mockMoviesModel();
-    }
-  }
-
-  return new LoadMoviesStub();
-};
+import { makeLoadMovies } from '../../../../__tests__/factories/movie/domain-factory';
+import { mockMoviesModel } from '../../../../__tests__/factories/movie/movie-factory';
 
 type SutTypes = {
   sut: LoadMoviesController;
-  loadMoviesStub: loadMovies;
+  loadMoviesStub: LoadMovies;
 };
 
 const makeSut = (): SutTypes => {

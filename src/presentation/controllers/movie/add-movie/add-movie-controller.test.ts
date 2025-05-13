@@ -3,37 +3,9 @@ import { AddMovie } from '../../../../domain/use-cases/movie/add-movie';
 import { Movie } from '../../../../domain/models/movie';
 import { AddMovieController } from './add-movie-controller';
 import { created } from '../../../helpers/http-helper';
-
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const makeAddMovie = (): AddMovie => {
-  class AddMovieStub implements AddMovie {
-    async add(data: AddMovie.Params): Promise<Movie> {
-      return new Promise(resolve => resolve(mockMovie()));
-    }
-  }
-
-  return new AddMovieStub();
-};
+import { mockMovie } from '../../../../__tests__/factories/movie/movie-factory';
+import { mockAddMovieParams } from '../../../../__tests__/factories/movie/request-params-factory';
+import { makeAddMovie } from '../../../../__tests__/factories/movie/domain-factory';
 
 type SutTypes = {
   sut: AddMovieController;

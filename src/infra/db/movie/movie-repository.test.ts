@@ -2,6 +2,8 @@ import { vi, test, describe, expect } from 'vitest';
 import { Movie } from '../../../domain/models/movie';
 import prisma from '../../../../prisma/db';
 import { MovieRepository } from './movie-repository';
+import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { mockAddMovieParams } from '../../../__tests__/factories/movie/request-params-factory';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
@@ -42,27 +44,6 @@ vi.mock('../../../../prisma/db', () => ({
     },
   },
 }));
-
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
 
 const makeSut = (): MovieRepository => {
   return new MovieRepository();

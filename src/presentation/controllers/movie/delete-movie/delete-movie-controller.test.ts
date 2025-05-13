@@ -2,14 +2,7 @@ import { vi, test, describe, expect, should } from 'vitest';
 import { DeleteMovie } from '../../../../domain/use-cases/movie/delete-movie';
 import { DeleteMovieController } from './delete-movie-controller';
 import { ok } from '../../../helpers/http-helper';
-
-const makeDeleteMovie = (): DeleteMovie => {
-  class DeleteMovieStub implements DeleteMovie {
-    async delete(id: number): Promise<void> {}
-  }
-
-  return new DeleteMovieStub();
-};
+import { makeDeleteMovie } from '../../../../__tests__/factories/movie/domain-factory';
 
 type SutTypes = {
   sut: DeleteMovieController;

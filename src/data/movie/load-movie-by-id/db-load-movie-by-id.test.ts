@@ -1,28 +1,9 @@
 import { vi, describe, expect, test } from 'vitest';
 import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
-import { Movie } from '../../../../generated/prisma';
 import { DbLoadMovieById } from './db-load-movie-by-id';
 import { NotFoundError } from '../../../shared/errors';
-
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const makeLoadMovieByIdRepository = () => {
-  class LoadMovieByIdRepositoryStub implements LoadMovieByIdRepository {
-    async loadById(id: number): Promise<Movie | null> {
-      return new Promise(resolve => resolve(mockMovie()));
-    }
-  }
-  return new LoadMovieByIdRepositoryStub();
-};
+import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import { makeLoadMovieByIdRepository } from '../../../__tests__/factories/movie/infra-factory';
 
 type SutTypes = {
   sut: DbLoadMovieById;

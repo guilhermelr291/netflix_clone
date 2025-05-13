@@ -5,45 +5,12 @@ import { Movie } from '../../../domain/models/movie';
 import { ConflictError } from '../../../shared/errors';
 import { AddMovieRepository } from '../../protocols/movie/add-movie-repository';
 import { AddMovie } from '../../../domain/use-cases/movie/add-movie';
-
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-const mockAddMovieParams = (): Omit<Movie, 'id'> => ({
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
-
-const makeLoadMovieByTitleRepository = (): LoadMovieByTitleRepository => {
-  class LoadMovieByTitleRepositoryStub implements LoadMovieByTitleRepository {
-    async loadByTitle(title: string): Promise<Movie | null> {
-      return new Promise(resolve => resolve(null));
-    }
-  }
-
-  return new LoadMovieByTitleRepositoryStub();
-};
-const makeAddMovieByRepository = (): AddMovieRepository => {
-  class AddMovieRepositoryStub implements AddMovieRepository {
-    async add(data: AddMovie.Params): Promise<Movie> {
-      return new Promise(resolve => resolve(mockMovie()));
-    }
-  }
-
-  return new AddMovieRepositoryStub();
-};
+import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
+import {
+  makeAddMovieByRepository,
+  makeLoadMovieByTitleRepository,
+} from '../../../__tests__/factories/movie/infra-factory';
+import { mockAddMovieParams } from '../../../__tests__/factories/movie/request-params-factory';
 
 type sutTypes = {
   sut: DbAddMovie;

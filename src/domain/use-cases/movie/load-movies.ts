@@ -1,5 +1,5 @@
 import { Movie } from '../../models/movie';
 
-export interface loadMovies {
+export interface LoadMovies {
   loadAll(): Promise<Movie[]>;
 }

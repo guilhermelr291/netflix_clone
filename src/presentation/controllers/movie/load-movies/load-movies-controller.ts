@@ -1,10 +1,10 @@
-import { loadMovies } from '../../../../domain/use-cases/movie/load-movies';
+import { LoadMovies } from '../../../../domain/use-cases/movie/load-movies';
 import { ok } from '../../../helpers/http-helper';
 import { Controller } from '../../../protocols/controller';
 import { HttpResponse } from '../../../protocols/http';
 
 export class LoadMoviesController implements Controller {
-  constructor(private readonly loadMovies: loadMovies) {}
+  constructor(private readonly loadMovies: LoadMovies) {}
 
   async handle(request: any): Promise<HttpResponse> {
     try {

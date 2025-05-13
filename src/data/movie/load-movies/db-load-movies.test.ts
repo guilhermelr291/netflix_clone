@@ -2,17 +2,8 @@ import { vi, test, describe, expect } from 'vitest';
 import { LoadMoviesRepository } from '../../protocols/movie/load-movies-repository';
 import { Movie } from '../../../domain/models/movie';
 import { DbLoadMovies } from './db-load-movies';
+import { mockMovie } from '../../../__tests__/factories/movie/movie-factory';
 
-const mockMovie = (): Movie => ({
-  id: 1,
-  title: 'Fake Movie',
-  previewUrl: 'http://example.com/preview',
-  thumbnailUrl: 'http://example.com/thumbnail',
-  description: 'This is a fake movie description.',
-  rating: 4.5,
-  releaseYear: 2023,
-  durationInMinutes: 120,
-});
 const mockAnotherMovie = (): Movie => ({
   id: 2,
   title: 'Another Fake Movie',
