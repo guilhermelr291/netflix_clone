@@ -38,9 +38,7 @@ const makeSut = (): SutTypes => {
 };
 
 const mockRequestData = () => ({
-  params: {
-    id: '1',
-  },
+  id: '1',
 });
 
 describe('LoadMovieByIdController', () => {
@@ -70,7 +68,7 @@ describe('LoadMovieByIdController', () => {
 
     await sut.handle(request);
 
-    expect(loadByIdSpy).toHaveBeenCalledWith(Number(request.params.id));
+    expect(loadByIdSpy).toHaveBeenCalledWith(Number(request.id));
   });
 
   test('should throw if loadMovieById throws', async () => {
