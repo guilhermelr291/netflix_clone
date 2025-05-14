@@ -4,6 +4,7 @@ import { AddEpisodeRepository } from '../../protocols/episode/add-episode-reposi
 import { makeLoadMovieByIdRepository } from '../../../__tests__/factories/movie/infra-factory';
 import { makeAddEpisodeRepository } from '../../../__tests__/factories/episode/infra-factory';
 import { mockAddEpisodeParams } from '../../../__tests__/factories/episode/requested-params-factory';
+import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
 
 type SutTypes = {
   sut: DbAddEpisode;
@@ -38,5 +39,11 @@ describe('DbAddEpisode', () => {
       new Error()
     );
     await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
+  });
+  test('Should return value from AddEpisodeRepository on success', async () => {
+    const { sut, addEpisodeRepositoryStub } = makeSut();
+    const data = mockAddEpisodeParams();
+    const episode = await sut.add(data);
+    expect(episode).toEqual(mockEpisode());
   });
 });
