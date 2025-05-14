@@ -76,5 +76,23 @@ describe('EpisodeRepository', () => {
       await sut.add(episodeData);
       expect(toPersistenceSpy).toHaveBeenCalledWith(episodeData);
     });
+    test('should call prisma.episode.create with correct values', async () => {
+      const { sut } = makeSut();
+      const episodeData = mockAddEpisodeParams();
+      await sut.add(episodeData);
+      expect(prisma.episode.create).toHaveBeenCalledWith({
+        data: {
+          title: episodeData.title,
+          description: episodeData.description ?? null,
+          episodeNumber: episodeData.episodeNumber,
+          previewUrl: episodeData.previewUrl,
+          url: episodeData.url,
+          thumbnailUrl: episodeData.thumbnailUrl,
+          durationInMinutes: episodeData.durationInMinutes,
+          releaseDate: episodeData.releaseDate,
+          movieId: episodeData.movieId,
+        },
+      });
+    });
   });
 });
