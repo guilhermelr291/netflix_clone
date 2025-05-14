@@ -1,7 +1,7 @@
 import { Episode } from '../../models/episode';
 
 export interface AddEpisode {
-  add: (data: AddEpisode.Params) => Promise<Episode>;
+  add(data: AddEpisode.Params): Promise<Episode>;
 }
 
 export namespace AddEpisode {
