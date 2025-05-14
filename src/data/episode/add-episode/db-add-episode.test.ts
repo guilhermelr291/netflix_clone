@@ -1,4 +1,4 @@
-import { describe, test, vi, expect } from 'vitest';
+import { describe, test, vi, expect, beforeAll, afterAll } from 'vitest';
 import { DbAddEpisode } from './db-add-episode';
 import { AddEpisodeRepository } from '../../protocols/episode/add-episode-repository';
 import { makeLoadMovieByIdRepository } from '../../../__tests__/factories/movie/infra-factory';
@@ -7,6 +7,7 @@ import { mockAddEpisodeParams } from '../../../__tests__/factories/episode/reque
 import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
 import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
 import { NotFoundError } from '../../../shared/errors';
+import mockdate from 'mockdate';
 
 type SutTypes = {
   sut: DbAddEpisode;
@@ -30,6 +31,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbAddEpisode', () => {
+  beforeAll(() => {
+    mockdate.set(new Date());
+  });
+  afterAll(() => {
+    mockdate.reset();
+  });
+
   test('Should call AddEpisodeRepository with correct values', async () => {
     const { sut, addEpisodeRepositoryStub } = makeSut();
     const addSpy = vi.spyOn(addEpisodeRepositoryStub, 'add');
