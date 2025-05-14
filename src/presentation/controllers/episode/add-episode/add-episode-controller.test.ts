@@ -4,6 +4,7 @@ import { AddEpisode } from '../../../../domain/use-cases/episode/add-episode';
 import { Episode } from '../../../../domain/models/episode';
 import { mockEpisode } from '../../../../__tests__/factories/episode/models-factory';
 import { mockAddEpisodeParams } from '../../../../__tests__/factories/episode/requested-params-factory';
+import { created } from '../../../helpers/http-helper';
 
 type SutTypes = {
   sut: AddEpisodeController;
@@ -32,5 +33,10 @@ describe('AddEpisodeController', () => {
     const request = mockAddEpisodeParams();
     await sut.handle(request);
     expect(addSpy).toHaveBeenCalledWith(request);
+  });
+  test('should return 201 and episode on success', async () => {
+    const { sut } = makeSut();
+    const response = await sut.handle(mockAddEpisodeParams());
+    expect(response).toEqual(created(mockEpisode()));
   });
 });
