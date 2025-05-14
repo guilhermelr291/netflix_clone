@@ -100,5 +100,13 @@ describe('EpisodeRepository', () => {
       const episode = await sut.add(episodeData);
       expect(episode).toEqual(mockEpisode());
     });
+    test('should throw if prisma.episode.create throws', async () => {
+      const { sut } = makeSut();
+      vi.spyOn(prisma.episode, 'create').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
+    });
   });
 });
