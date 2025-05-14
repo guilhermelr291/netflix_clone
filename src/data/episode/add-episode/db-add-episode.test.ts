@@ -5,23 +5,26 @@ import { makeLoadMovieByIdRepository } from '../../../__tests__/factories/movie/
 import { makeAddEpisodeRepository } from '../../../__tests__/factories/episode/infra-factory';
 import { mockAddEpisodeParams } from '../../../__tests__/factories/episode/requested-params-factory';
 import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
+import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
 
 type SutTypes = {
   sut: DbAddEpisode;
   addEpisodeRepositoryStub: AddEpisodeRepository;
+  loadMovieByIdRepositoryStub: LoadMovieByIdRepository;
 };
 
 const makeSut = (): SutTypes => {
   const addEpisodeRepositoryStub = makeAddEpisodeRepository();
-
+  const loadMovieByIdRepositoryStub = makeLoadMovieByIdRepository();
   const sut = new DbAddEpisode(
     addEpisodeRepositoryStub,
-    makeLoadMovieByIdRepository()
+    loadMovieByIdRepositoryStub
   );
 
   return {
     sut,
     addEpisodeRepositoryStub,
+    loadMovieByIdRepositoryStub,
   };
 };
 
@@ -45,5 +48,12 @@ describe('DbAddEpisode', () => {
     const data = mockAddEpisodeParams();
     const episode = await sut.add(data);
     expect(episode).toEqual(mockEpisode());
+  });
+  test('Should call LoadMovieByIdRepository with correct values', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    const loadSpy = vi.spyOn(loadMovieByIdRepositoryStub, 'loadById');
+    const data = mockAddEpisodeParams();
+    await sut.add(data);
+    expect(loadSpy).toHaveBeenCalledWith(data.movieId);
   });
 });
