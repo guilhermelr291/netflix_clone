@@ -44,7 +44,7 @@ describe('DbAddEpisode', () => {
     await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
   });
   test('Should return value from AddEpisodeRepository on success', async () => {
-    const { sut, addEpisodeRepositoryStub } = makeSut();
+    const { sut } = makeSut();
     const data = mockAddEpisodeParams();
     const episode = await sut.add(data);
     expect(episode).toEqual(mockEpisode());
@@ -55,5 +55,12 @@ describe('DbAddEpisode', () => {
     const data = mockAddEpisodeParams();
     await sut.add(data);
     expect(loadSpy).toHaveBeenCalledWith(data.movieId);
+  });
+  test('Should throw if LoadMovieByIdRepository throws', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadMovieByIdRepositoryStub, 'loadById').mockRejectedValueOnce(
+      new Error()
+    );
+    await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
   });
 });
