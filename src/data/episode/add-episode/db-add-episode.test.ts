@@ -32,4 +32,11 @@ describe('DbAddEpisode', () => {
     await sut.add(data);
     expect(addSpy).toHaveBeenCalledWith(data);
   });
+  test('Should throw if AddEpisodeRepository throws', async () => {
+    const { sut, addEpisodeRepositoryStub } = makeSut();
+    vi.spyOn(addEpisodeRepositoryStub, 'add').mockRejectedValueOnce(
+      new Error()
+    );
+    await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
+  });
 });
