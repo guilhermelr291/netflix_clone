@@ -3,7 +3,7 @@ import { Movie } from '../../../domain/models/movie';
 import prisma from '../../../../prisma/db';
 import { MovieRepository } from './movie-repository';
 import { mockMovie } from '../../../__tests__/factories/movie/models-factory';
-import { mockAddMovieParams } from '../../../__tests__/factories/movie/request-params-factory';
+import { mockAddMovieParams } from '../../../__tests__/factories/movie/requested-params-factory';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {

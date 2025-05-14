@@ -4,7 +4,7 @@ import { Movie } from '../../../../domain/models/movie';
 import { AddMovieController } from './add-movie-controller';
 import { created } from '../../../helpers/http-helper';
 import { mockMovie } from '../../../../__tests__/factories/movie/models-factory';
-import { mockAddMovieParams } from '../../../../__tests__/factories/movie/request-params-factory';
+import { mockAddMovieParams } from '../../../../__tests__/factories/movie/requested-params-factory';
 import { makeAddMovie } from '../../../../__tests__/factories/movie/domain-factory';
 
 type SutTypes = {

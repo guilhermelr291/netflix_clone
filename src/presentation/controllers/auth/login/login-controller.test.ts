@@ -3,7 +3,7 @@ import { LoginController } from './login-controller';
 import { Authentication } from '../../../../domain/use-cases/user/authentication';
 import { mockAuthenticationResult } from '../../../../__tests__/factories/user/models-factory';
 import { makeAuthentication } from '../../../../__tests__/factories/user/domain-factory';
-import { mockAuthenticationParams } from '../../../../__tests__/factories/user/request-params';
+import { mockAuthenticationParams } from '../../../../__tests__/factories/user/requested-params';
 
 type sutTypes = {
   sut: LoginController;

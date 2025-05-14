@@ -10,7 +10,7 @@ import {
   makeAddMovieByRepository,
   makeLoadMovieByTitleRepository,
 } from '../../../__tests__/factories/movie/infra-factory';
-import { mockAddMovieParams } from '../../../__tests__/factories/movie/request-params-factory';
+import { mockAddMovieParams } from '../../../__tests__/factories/movie/requested-params-factory';
 
 type sutTypes = {
   sut: DbAddMovie;

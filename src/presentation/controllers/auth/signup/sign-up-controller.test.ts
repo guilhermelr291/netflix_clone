@@ -5,7 +5,7 @@ import { FieldComparer } from '../../../protocols/field-comparer';
 import { BadRequestError } from '../../../../shared/errors';
 import { created } from '../../../helpers/http-helper';
 import { makeAddUser } from '../../../../__tests__/factories/user/domain-factory';
-import { mockSignUpRequestParams } from '../../../../__tests__/factories/user/request-params';
+import { mockSignUpRequestParams } from '../../../../__tests__/factories/user/requested-params';
 
 const makeFieldComparer = (): FieldComparer => {
   class FieldComparerStub implements FieldComparer {

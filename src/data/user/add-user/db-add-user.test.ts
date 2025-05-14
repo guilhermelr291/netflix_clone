@@ -6,7 +6,7 @@ import { UnprocessableEntityError } from '../../../shared/errors';
 import { AddUserRepository } from '../../protocols/user/add-user-repository';
 import { mockUser } from '../../../__tests__/factories/user/models-factory';
 import { makeAddUserRepository } from '../../../__tests__/factories/user/infra-factory';
-import { mockAddUserParams } from '../../../__tests__/factories/user/request-params';
+import { mockAddUserParams } from '../../../__tests__/factories/user/requested-params';
 import { UserModel } from '../../../domain/models/user';
 
 const makeHasher = (): Hasher => {

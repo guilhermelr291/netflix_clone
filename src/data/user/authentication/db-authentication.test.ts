@@ -7,7 +7,7 @@ import { Encrypter } from '../../protocols/cryptography/encrypter';
 import { LoadUserByEmailRepository } from '../../protocols/user/load-user-by-email-repository';
 import { mockUser } from '../../../__tests__/factories/user/models-factory';
 import { makeLoadUserByEmailRepository } from '../../../__tests__/factories/user/infra-factory';
-import { mockAuthenticationParams } from '../../../__tests__/factories/user/request-params';
+import { mockAuthenticationParams } from '../../../__tests__/factories/user/requested-params';
 
 const makeHashComparer = (): HashComparer => {
   class HashComparerStub implements HashComparer {

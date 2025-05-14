@@ -4,7 +4,7 @@ import { AddUser } from '../../../domain/use-cases/user/add-user';
 import prisma from '../../../../prisma/db';
 import { UserModel } from '../../../domain/models/user';
 import { mockUser } from '../../../__tests__/factories/user/models-factory';
-import { mockAddUserParams } from '../../../__tests__/factories/user/request-params';
+import { mockAddUserParams } from '../../../__tests__/factories/user/requested-params';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
