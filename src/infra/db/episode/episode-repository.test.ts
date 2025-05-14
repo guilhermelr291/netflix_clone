@@ -94,5 +94,11 @@ describe('EpisodeRepository', () => {
         },
       });
     });
+    test('should return an episode on success', async () => {
+      const { sut } = makeSut();
+      const episodeData = mockAddEpisodeParams();
+      const episode = await sut.add(episodeData);
+      expect(episode).toEqual(mockEpisode());
+    });
   });
 });
