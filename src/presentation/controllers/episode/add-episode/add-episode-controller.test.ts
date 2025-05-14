@@ -39,4 +39,9 @@ describe('AddEpisodeController', () => {
     const response = await sut.handle(mockAddEpisodeParams());
     expect(response).toEqual(created(mockEpisode()));
   });
+  test('should throw if AddEpisode throws', async () => {
+    const { sut, addEpisodeStub } = makeSut();
+    vi.spyOn(addEpisodeStub, 'add').mockRejectedValueOnce(new Error());
+    await expect(sut.handle(mockAddEpisodeParams())).rejects.toThrow();
+  });
 });
