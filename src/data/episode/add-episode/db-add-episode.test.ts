@@ -6,6 +6,7 @@ import { makeAddEpisodeRepository } from '../../../__tests__/factories/episode/i
 import { mockAddEpisodeParams } from '../../../__tests__/factories/episode/requested-params-factory';
 import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
 import { LoadMovieByIdRepository } from '../../protocols/movie/load-movie-by-id-repository';
+import { NotFoundError } from '../../../shared/errors';
 
 type SutTypes = {
   sut: DbAddEpisode;
@@ -62,5 +63,14 @@ describe('DbAddEpisode', () => {
       new Error()
     );
     await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
+  });
+  test('Should throw NotFoundError if LoadMovieByIdRepository returns null', async () => {
+    const { sut, loadMovieByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadMovieByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+      null
+    );
+    await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow(
+      new NotFoundError('Movie not found')
+    );
   });
 });
