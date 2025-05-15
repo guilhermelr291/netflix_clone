@@ -2,6 +2,7 @@ import { vi, test, expect, describe } from 'vitest';
 import { DeleteEpisodeController } from './delete-episode-controller';
 import { makeDeleteEpisodeStub } from '../../../../__tests__/factories/episode/domain-factory';
 import { DeleteEpisode } from '../../../../domain/use-cases/episode/delete-episode';
+import { ok } from '../../../helpers/http-helper';
 
 type SutTypes = {
   sut: DeleteEpisodeController;
@@ -28,5 +29,10 @@ describe('DeleteEpisodeController', () => {
 
     await sut.handle(mockRequest);
     expect(deleteSpy).toHaveBeenCalledWith(mockRequest.id);
+  });
+  test('should return ok if DeleteEpisode succeeds', async () => {
+    const { sut } = makeSut();
+    const response = await sut.handle(mockRequest);
+    expect(response).toEqual(ok({ message: 'episode deleted successfully' }));
   });
 });
