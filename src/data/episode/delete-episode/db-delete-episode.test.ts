@@ -1,0 +1,32 @@
+import { describe, expect, test, vi } from 'vitest';
+import { DeleteEpisodeRepository } from '../../protocols/episode/delete-episode-repository';
+import { DbDeleteEpisode } from './db-delete-episode';
+
+const makeDeleteEpisodeRepository = () => {
+  class DeleteEpisodeRepositoryStub implements DeleteEpisodeRepository {
+    async delete(id: number): Promise<void> {}
+  }
+
+  return new DeleteEpisodeRepositoryStub();
+};
+
+type SutTypes = {
+  sut: DbDeleteEpisode;
+  deleteEpisodeRepositoryStub: DeleteEpisodeRepository;
+};
+
+const makeSut = (): SutTypes => {
+  const deleteEpisodeRepositoryStub = makeDeleteEpisodeRepository();
+  const sut = new DbDeleteEpisode(deleteEpisodeRepositoryStub);
+  return { sut, deleteEpisodeRepositoryStub };
+};
+
+describe('DbDeleteEpisode', () => {
+  test('should call DeleteEpisodeRepository with correct id', async () => {
+    const { sut, deleteEpisodeRepositoryStub } = makeSut();
+    const deleteSpy = vi.spyOn(deleteEpisodeRepositoryStub, 'delete');
+    const id = 1;
+    await sut.delete(id);
+    expect(deleteSpy).toHaveBeenCalledWith(id);
+  });
+});
