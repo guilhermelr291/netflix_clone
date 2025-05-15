@@ -25,6 +25,18 @@ vi.mock('../../../../prisma/db', () => ({
         movieId: 1,
       }),
       delete: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue({
+        id: 1,
+        title: 'any_title',
+        description: 'any_description',
+        episodeNumber: 1,
+        previewUrl: 'any_preview_url',
+        url: 'any_url',
+        thumbnailUrl: 'any_thumbnail_url',
+        durationInMinutes: 1,
+        releaseDate: new Date(),
+        movieId: 1,
+      }),
     },
   },
 }));
@@ -118,6 +130,7 @@ describe('EpisodeRepository', () => {
       await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
     });
   });
+
   describe('delete', () => {
     test('should call prisma.episode.delete with correct id', async () => {
       const { sut } = makeSut();
@@ -135,6 +148,37 @@ describe('EpisodeRepository', () => {
       });
 
       await expect(sut.delete(1)).rejects.toThrow();
+    });
+  });
+
+  describe('loadById', () => {
+    test('should call prisma.episode.findUnique with correct id', async () => {
+      const { sut } = makeSut();
+      await sut.loadById(1);
+      expect(prisma.episode.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: 1,
+        },
+      });
+    });
+    test('should return null if prisma.episode.findUnique returns null', async () => {
+      const { sut } = makeSut();
+      vi.spyOn(prisma.episode, 'findUnique').mockResolvedValueOnce(null);
+      const episode = await sut.loadById(1);
+      expect(episode).toBeNull();
+    });
+    test('should return an episode on success', async () => {
+      const { sut } = makeSut();
+      const episode = await sut.loadById(1);
+      expect(episode).toEqual(mockEpisode());
+    });
+    test('should throw if prisma.episode.findUnique throws', async () => {
+      const { sut } = makeSut();
+      vi.spyOn(prisma.episode, 'findUnique').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.loadById(1)).rejects.toThrow();
     });
   });
 });
