@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeAll, afterAll } from 'vitest';
 import { EpisodeRepository } from './episode-repository';
 import { EpisodeMapper } from '../protocols/episode-mapper';
 import { Episode as PrismaEpisodeModel } from '../../../../generated/prisma';
@@ -7,6 +7,7 @@ import { AddEpisode } from '../../../domain/use-cases/episode/add-episode';
 import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
 import { mockAddEpisodeParams } from '../../../__tests__/factories/episode/requested-params-factory';
 import prisma from '../../../../prisma/db';
+import mockDate from 'mockdate';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
@@ -69,6 +70,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('EpisodeRepository', () => {
+  beforeAll(() => {
+    mockDate.set('2025-05-01');
+  });
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   describe('add', () => {
     test('should call EpisodeMapper.toPersistence with correct values', async () => {
       const { sut, episodeMapperStub } = makeSut();

@@ -35,4 +35,12 @@ describe('DeleteEpisodeController', () => {
     const response = await sut.handle(mockRequest);
     expect(response).toEqual(ok({ message: 'episode deleted successfully' }));
   });
+  test('should throw if DeleteEpisode throws', async () => {
+    const { sut, deleteEpisodeStub } = makeSut();
+    vi.spyOn(deleteEpisodeStub, 'delete').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.handle(mockRequest)).rejects.toThrow();
+  });
 });
