@@ -1,14 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { DeleteEpisodeRepository } from '../../protocols/episode/delete-episode-repository';
 import { DbDeleteEpisode } from './db-delete-episode';
-
-const makeDeleteEpisodeRepository = () => {
-  class DeleteEpisodeRepositoryStub implements DeleteEpisodeRepository {
-    async delete(id: number): Promise<void> {}
-  }
-
-  return new DeleteEpisodeRepositoryStub();
-};
+import { makeDeleteEpisodeRepository } from '../../../__tests__/factories/episode/infra-factory';
 
 type SutTypes = {
   sut: DbDeleteEpisode;

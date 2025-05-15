@@ -1,5 +1,6 @@
 import { Episode } from '../../../domain/models/episode';
 import { AddEpisode } from '../../../domain/use-cases/episode/add-episode';
+import { DeleteEpisode } from '../../../domain/use-cases/episode/delete-episode';
 import { mockEpisode } from './models-factory';
 
 export const makeAddEpisodeStub = (): AddEpisode => {
@@ -9,4 +10,12 @@ export const makeAddEpisodeStub = (): AddEpisode => {
     }
   }
   return new AddEpisodeStub();
+};
+
+export const makeDeleteEpisodeStub = () => {
+  class DeleteEpisodeStub implements DeleteEpisode {
+    async delete(id: number): Promise<void> {}
+  }
+
+  return new DeleteEpisodeStub();
 };
