@@ -1,10 +1,13 @@
 import prisma from '../../../../prisma/db';
 import { AddEpisodeRepository } from '../../../data/protocols/episode/add-episode-repository';
+import { DeleteEpisodeRepository } from '../../../data/protocols/episode/delete-episode-repository';
 import { Episode } from '../../../domain/models/episode';
 import { AddEpisode } from '../../../domain/use-cases/episode/add-episode';
 import { EpisodeMapper } from '../protocols/episode-mapper';
 
-export class EpisodeRepository implements AddEpisodeRepository {
+export class EpisodeRepository
+  implements AddEpisodeRepository, DeleteEpisodeRepository
+{
   constructor(private readonly episodeMapper: EpisodeMapper) {}
   async add(data: AddEpisode.Params): Promise<Episode> {
     const persistenceData = this.episodeMapper.toPersistence(data);
@@ -14,5 +17,13 @@ export class EpisodeRepository implements AddEpisodeRepository {
     });
 
     return this.episodeMapper.toDomain(episode);
+  }
+
+  async delete(id: number): Promise<void> {
+    await prisma.episode.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
