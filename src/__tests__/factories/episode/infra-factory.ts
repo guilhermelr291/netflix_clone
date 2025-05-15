@@ -1,5 +1,6 @@
 import { AddEpisodeRepository } from '../../../data/protocols/episode/add-episode-repository';
 import { DeleteEpisodeRepository } from '../../../data/protocols/episode/delete-episode-repository';
+import { LoadEpisodeByIdRepository } from '../../../data/protocols/episode/load-episode-by-id-repository';
 import { Episode } from '../../../domain/models/episode';
 import { AddEpisode } from '../../../domain/use-cases/episode/add-episode';
 import { mockEpisode } from './models-factory';
@@ -20,4 +21,14 @@ export const makeDeleteEpisodeRepository = () => {
   }
 
   return new DeleteEpisodeRepositoryStub();
+};
+
+export const makeLoadEpisodeByIdRepository = () => {
+  class LoadEpisodeByIdRepositoryStub implements LoadEpisodeByIdRepository {
+    async loadById(id: number): Promise<Episode | null> {
+      return new Promise(resolve => resolve(mockEpisode()));
+    }
+  }
+
+  return new LoadEpisodeByIdRepositoryStub();
 };
