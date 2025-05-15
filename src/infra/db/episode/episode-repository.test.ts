@@ -120,5 +120,13 @@ describe('EpisodeRepository', () => {
         },
       });
     });
+    test('should throw if prisma.episode.delete throws', async () => {
+      const { sut } = makeSut();
+      vi.spyOn(prisma.episode, 'delete').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await expect(sut.delete(1)).rejects.toThrow();
+    });
   });
 });
