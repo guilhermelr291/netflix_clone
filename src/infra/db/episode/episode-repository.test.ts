@@ -23,6 +23,7 @@ vi.mock('../../../../prisma/db', () => ({
         releaseDate: new Date(),
         movieId: 1,
       }),
+      delete: vi.fn(),
     },
   },
 }));
@@ -107,6 +108,17 @@ describe('EpisodeRepository', () => {
       });
 
       await expect(sut.add(mockAddEpisodeParams())).rejects.toThrow();
+    });
+  });
+  describe('delete', () => {
+    test('should call prisma.episode.delete with correct id', async () => {
+      const { sut } = makeSut();
+      await sut.delete(1);
+      expect(prisma.episode.delete).toHaveBeenCalledWith({
+        where: {
+          id: 1,
+        },
+      });
     });
   });
 });
