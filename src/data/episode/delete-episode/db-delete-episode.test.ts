@@ -48,4 +48,14 @@ describe('DbDeleteEpisode', () => {
     await sut.delete(id);
     expect(loadSpy).toHaveBeenCalledWith(id);
   });
+  test('should throw if LoadEpisodeByIdRepository throws', async () => {
+    const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById').mockImplementationOnce(
+      async () => {
+        return Promise.reject(new Error());
+      }
+    );
+
+    await expect(sut.delete(1)).rejects.toThrow();
+  });
 });
