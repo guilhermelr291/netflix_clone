@@ -1,23 +1,14 @@
 import { describe, test, expect, vi } from 'vitest';
 import { AddEpisodeController } from './add-episode-controller';
 import { AddEpisode } from '../../../../domain/use-cases/episode/add-episode';
-import { Episode } from '../../../../domain/models/episode';
 import { mockEpisode } from '../../../../__tests__/factories/episode/models-factory';
 import { mockAddEpisodeParams } from '../../../../__tests__/factories/episode/requested-params-factory';
 import { created } from '../../../helpers/http-helper';
+import { makeAddEpisodeStub } from '../../../../__tests__/factories/episode/domain-factory';
 
 type SutTypes = {
   sut: AddEpisodeController;
   addEpisodeStub: AddEpisode;
-};
-
-const makeAddEpisodeStub = (): AddEpisode => {
-  class AddEpisodeStub implements AddEpisode {
-    async add(data: AddEpisode.Params): Promise<Episode> {
-      return new Promise(resolve => resolve(mockEpisode()));
-    }
-  }
-  return new AddEpisodeStub();
 };
 
 const makeSut = (): SutTypes => {
