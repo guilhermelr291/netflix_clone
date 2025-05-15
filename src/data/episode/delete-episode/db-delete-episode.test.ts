@@ -29,4 +29,14 @@ describe('DbDeleteEpisode', () => {
     await sut.delete(id);
     expect(deleteSpy).toHaveBeenCalledWith(id);
   });
+  test('should throw if DeleteEpisodeRepository throws', async () => {
+    const { sut, deleteEpisodeRepositoryStub } = makeSut();
+    vi.spyOn(deleteEpisodeRepositoryStub, 'delete').mockImplementationOnce(
+      async () => {
+        return Promise.reject(new Error());
+      }
+    );
+
+    await expect(sut.delete(1)).rejects.toThrow();
+  });
 });
