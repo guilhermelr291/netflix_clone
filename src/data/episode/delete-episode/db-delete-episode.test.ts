@@ -1,17 +1,26 @@
 import { describe, expect, test, vi } from 'vitest';
 import { DeleteEpisodeRepository } from '../../protocols/episode/delete-episode-repository';
 import { DbDeleteEpisode } from './db-delete-episode';
-import { makeDeleteEpisodeRepository } from '../../../__tests__/factories/episode/infra-factory';
+import {
+  makeDeleteEpisodeRepository,
+  makeLoadEpisodeByIdRepository,
+} from '../../../__tests__/factories/episode/infra-factory';
+import { LoadEpisodeByIdRepository } from '../../protocols/episode/load-episode-by-id-repository';
 
 type SutTypes = {
   sut: DbDeleteEpisode;
   deleteEpisodeRepositoryStub: DeleteEpisodeRepository;
+  loadEpisodeByIdRepositoryStub: LoadEpisodeByIdRepository;
 };
 
 const makeSut = (): SutTypes => {
   const deleteEpisodeRepositoryStub = makeDeleteEpisodeRepository();
-  const sut = new DbDeleteEpisode(deleteEpisodeRepositoryStub);
-  return { sut, deleteEpisodeRepositoryStub };
+  const loadEpisodeByIdRepositoryStub = makeLoadEpisodeByIdRepository();
+  const sut = new DbDeleteEpisode(
+    deleteEpisodeRepositoryStub,
+    loadEpisodeByIdRepositoryStub
+  );
+  return { sut, deleteEpisodeRepositoryStub, loadEpisodeByIdRepositoryStub };
 };
 
 describe('DbDeleteEpisode', () => {
@@ -31,5 +40,12 @@ describe('DbDeleteEpisode', () => {
     );
 
     await expect(sut.delete(1)).rejects.toThrow();
+  });
+  test('should call LoadEpisodeByIdRepository with correct id', async () => {
+    const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
+    const loadSpy = vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById');
+    const id = 1;
+    await sut.delete(id);
+    expect(loadSpy).toHaveBeenCalledWith(id);
   });
 });
