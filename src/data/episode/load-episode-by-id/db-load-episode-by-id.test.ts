@@ -4,6 +4,7 @@ import { LoadEpisodeByIdRepository } from '../../protocols/episode/load-episode-
 import { makeLoadEpisodeByIdRepository as makeLoadEpisodeByIdRepositoryStub } from '../../../__tests__/factories/episode/infra-factory';
 import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
 import mockDate from 'mockdate';
+import { NotFoundError } from '../../../shared/errors';
 
 type SutTypes = {
   sut: DbLoadEpisodeById;
@@ -46,5 +47,15 @@ describe('DbLoadEpisodeById', () => {
     const { sut } = makeSut();
     const episode = await sut.load('any_id');
     expect(episode).toEqual(mockEpisode());
+  });
+  test('should throw NotFoundError if LoadEpisodeByIdRepository returns null', async () => {
+    const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+      null
+    );
+
+    await expect(sut.load('any_id')).rejects.toThrow(
+      new NotFoundError('Episode not found')
+    );
   });
 });
