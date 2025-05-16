@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { adminAuth } from '../middlewares/admin-auth-middleware';
+import { adminAuth, auth } from '../middlewares';
 import { adaptMiddleware, adaptRoute } from '../adapters';
 import {
   makeAddEpisodeController,
   makeAddEpisodeDataValidationMiddleware,
   makeDeleteEpisodeController,
+  makeLoadEpisodeByIdController,
 } from '../factories';
 
 export default (router: Router): void => {
@@ -18,5 +19,10 @@ export default (router: Router): void => {
     '/episodes/:id',
     adminAuth,
     adaptRoute(makeDeleteEpisodeController())
+  );
+  router.get(
+    '/episodes/:id',
+    auth,
+    adaptRoute(makeLoadEpisodeByIdController())
   );
 };
