@@ -25,4 +25,12 @@ describe('DbLoadEpisodeById', () => {
     await sut.load(id);
     expect(loadByIdSpy).toHaveBeenCalledWith(id);
   });
+  test('should throw if LoadEpisodeByIdRepository throws', async () => {
+    const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById').mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.load('any_id')).rejects.toThrow();
+  });
 });
