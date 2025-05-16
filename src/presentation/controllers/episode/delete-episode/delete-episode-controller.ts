@@ -8,7 +8,7 @@ export class DeleteEpisodeController implements Controller {
 
   async handle(request: DeleteEpisodeController.Params): Promise<HttpResponse> {
     try {
-      const id = Number(request.id);
+      const id = request.id;
 
       await this.deleteEpisode.delete(id);
 
@@ -22,6 +22,6 @@ export class DeleteEpisodeController implements Controller {
 
 export namespace DeleteEpisodeController {
   export type Params = {
-    id: number;
+    id: string;
   };
 }

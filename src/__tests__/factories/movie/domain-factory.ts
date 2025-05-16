@@ -17,7 +17,7 @@ export const makeAddMovie = (): AddMovie => {
 
 export const makeDeleteMovie = (): DeleteMovie => {
   class DeleteMovieStub implements DeleteMovie {
-    async delete(id: number): Promise<void> {}
+    async delete(id: string): Promise<void> {}
   }
 
   return new DeleteMovieStub();
@@ -25,7 +25,7 @@ export const makeDeleteMovie = (): DeleteMovie => {
 
 export const makeLoadMovieById = (): LoadMovieById => {
   class LoadMovieByIdStub implements LoadMovieById {
-    async loadById(id: number): Promise<any> {
+    async loadById(id: string): Promise<any> {
       return mockMovie();
     }
   }

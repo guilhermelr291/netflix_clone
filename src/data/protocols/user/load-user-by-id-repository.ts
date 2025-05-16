@@ -1,5 +1,5 @@
 import { UserModel } from '../../../domain/models/user';
 
 export interface LoadUserByIdRepository {
-  loadById(id: number, role?: string): Promise<UserModel | null>;
+  loadById(id: string, role?: string): Promise<UserModel | null>;
 }

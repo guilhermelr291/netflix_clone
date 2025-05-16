@@ -10,7 +10,7 @@ export class DeleteMovieController implements Controller {
     try {
       const { id } = request;
 
-      await this.deleteMovie.delete(Number(id));
+      await this.deleteMovie.delete(id);
 
       return ok({ message: 'movie deleted successfully' });
     } catch (error) {
@@ -22,6 +22,6 @@ export class DeleteMovieController implements Controller {
 
 export namespace DeleteMovieController {
   export type Params = {
-    id: number;
+    id: string;
   };
 }

@@ -32,7 +32,7 @@ describe('DbDeleteMovie UseCase', () => {
   test('Should call DeleteMovieRepository with correct id', async () => {
     const { sut, deleteMovieRepositoryStub } = makeSut();
     const deleteByIdSpy = vi.spyOn(deleteMovieRepositoryStub, 'deleteById');
-    const id = 1;
+    const id = '1';
     await sut.delete(id);
     expect(deleteByIdSpy).toHaveBeenCalledWith(id);
   });
@@ -44,12 +44,12 @@ describe('DbDeleteMovie UseCase', () => {
       }
     );
 
-    await expect(sut.delete(1)).rejects.toThrow();
+    await expect(sut.delete('1')).rejects.toThrow();
   });
   test('Should call LoadMovieByIdRepository with correct id', async () => {
     const { sut, loadMovieByIdRepositoryStub } = makeSut();
     const loadByIdSpy = vi.spyOn(loadMovieByIdRepositoryStub, 'loadById');
-    const id = 1;
+    const id = '1';
     await sut.delete(id);
     expect(loadByIdSpy).toHaveBeenCalledWith(id);
   });
@@ -59,7 +59,7 @@ describe('DbDeleteMovie UseCase', () => {
       null
     );
 
-    await expect(sut.delete(1)).rejects.toThrow(
+    await expect(sut.delete('1')).rejects.toThrow(
       new NotFoundError('Movie not found')
     );
   });
@@ -72,6 +72,6 @@ describe('DbDeleteMovie UseCase', () => {
       }
     );
 
-    await expect(sut.delete(1)).rejects.toThrow();
+    await expect(sut.delete('1')).rejects.toThrow();
   });
 });

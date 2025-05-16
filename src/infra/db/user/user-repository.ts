@@ -20,9 +20,9 @@ export class UserRepository
 
     return user;
   }
-  async loadById(id: number, role?: string): Promise<UserModel | null> {
+  async loadById(id: string, role?: string): Promise<UserModel | null> {
     const user = await prisma.user.findUnique({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     if (user && role && user.role !== role) {

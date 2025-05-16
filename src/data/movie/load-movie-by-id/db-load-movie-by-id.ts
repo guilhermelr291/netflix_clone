@@ -8,7 +8,7 @@ export class DbLoadMovieById implements LoadMovieById {
     private readonly loadMovieByIdRepository: LoadMovieByIdRepository
   ) {}
 
-  async loadById(id: number): Promise<Movie | null> {
+  async loadById(id: string): Promise<Movie | null> {
     const movie = await this.loadMovieByIdRepository.loadById(id);
     if (!movie) {
       throw new NotFoundError('Movie not found');

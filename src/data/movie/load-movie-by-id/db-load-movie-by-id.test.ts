@@ -23,13 +23,13 @@ describe('DbLoadMovieById', () => {
   test('should call LoadMovieByIdRepository with correct id', async () => {
     const { sut, loadMovieByIdRepositoryStub } = makeSut();
     const loadByIdSpy = vi.spyOn(loadMovieByIdRepositoryStub, 'loadById');
-    const id = 1;
+    const id = '1';
     await sut.loadById(id);
     expect(loadByIdSpy).toHaveBeenCalledWith(id);
   });
   test('should return a movie on success', async () => {
     const { sut } = makeSut();
-    const id = 1;
+    const id = '1';
     const movie = await sut.loadById(id);
     expect(movie).toEqual(mockMovie());
   });
@@ -39,7 +39,7 @@ describe('DbLoadMovieById', () => {
       null
     );
 
-    await expect(sut.loadById(1)).rejects.toThrow(
+    await expect(sut.loadById('1')).rejects.toThrow(
       new NotFoundError('Movie not found')
     );
   });
@@ -49,6 +49,6 @@ describe('DbLoadMovieById', () => {
       new Error()
     );
 
-    await expect(sut.loadById(1)).rejects.toThrow(new Error());
+    await expect(sut.loadById('1')).rejects.toThrow(new Error());
   });
 });

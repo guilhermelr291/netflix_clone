@@ -1,3 +1,4 @@
+import { number } from 'zod';
 import prisma from '../../../../prisma/db';
 import { AddEpisodeRepository } from '../../../data/protocols/episode/add-episode-repository';
 import { DeleteEpisodeRepository } from '../../../data/protocols/episode/delete-episode-repository';
@@ -23,18 +24,18 @@ export class EpisodeRepository
     return this.episodeMapper.toDomain(episode);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await prisma.episode.delete({
       where: {
-        id,
+        id: Number(id),
       },
     });
   }
 
-  async loadById(id: number): Promise<Episode | null> {
+  async loadById(id: string): Promise<Episode | null> {
     const episode = await prisma.episode.findUnique({
       where: {
-        id,
+        id: Number(id),
       },
     });
 

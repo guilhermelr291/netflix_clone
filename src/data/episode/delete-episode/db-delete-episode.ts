@@ -8,7 +8,7 @@ export class DbDeleteEpisode implements DeleteEpisode {
     private readonly deleteEpisodeRepository: DeleteEpisodeRepository,
     private readonly loadEpisodeByIdRepository: LoadEpisodeByIdRepository
   ) {}
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     const episode = await this.loadEpisodeByIdRepository.loadById(id);
     if (!episode) {
       throw new NotFoundError('Episode not found');

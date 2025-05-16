@@ -1,3 +1,3 @@
 export interface DeleteEpisode {
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 }

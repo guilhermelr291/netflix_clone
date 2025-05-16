@@ -8,7 +8,7 @@ import { mockMovie } from './models-factory';
 
 export const makeLoadMovieByIdRepository = () => {
   class LoadMovieByIdRepositoryStub implements LoadMovieByIdRepository {
-    loadById(id: number): Promise<Movie | null> {
+    loadById(id: string): Promise<Movie | null> {
       return new Promise(resolve => resolve(mockMovie()));
     }
   }
@@ -39,7 +39,7 @@ export const makeAddMovieByRepository = (): AddMovieRepository => {
 
 export const makeDeleteMovieRepository = () => {
   class DeleteMovieRepositoryStub implements DeleteMovieRepository {
-    async deleteById(id: number): Promise<void> {}
+    async deleteById(id: string): Promise<void> {}
   }
   return new DeleteMovieRepositoryStub();
 };

@@ -19,7 +19,7 @@ const makeSut = (): SutTypes => {
 };
 
 const mockRequest = {
-  id: 1,
+  id: '1',
 };
 
 describe('DeleteEpisodeController', () => {

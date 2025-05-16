@@ -14,6 +14,6 @@ export namespace AddEpisode {
     thumbnailUrl: string;
     durationInMinutes: number;
     releaseDate: Date;
-    movieId: number;
+    movieId: string;
   };
 }

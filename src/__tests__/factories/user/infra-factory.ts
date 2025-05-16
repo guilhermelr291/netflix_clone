@@ -25,7 +25,7 @@ export const makeAddUserRepository = (): AddUserRepository => {
 
 export const makeLoadUserByIdRepository = (): LoadUserByIdRepository => {
   class LoadUserByIdRepositoryStub implements LoadUserByIdRepository {
-    loadById(id: number): Promise<UserModel | null> {
+    loadById(id: string): Promise<UserModel | null> {
       return new Promise(resolve => resolve(mockUser()));
     }
   }

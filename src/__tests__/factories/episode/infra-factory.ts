@@ -17,7 +17,7 @@ export const makeAddEpisodeRepository = () => {
 
 export const makeDeleteEpisodeRepository = () => {
   class DeleteEpisodeRepositoryStub implements DeleteEpisodeRepository {
-    async delete(id: number): Promise<void> {}
+    async delete(id: string): Promise<void> {}
   }
 
   return new DeleteEpisodeRepositoryStub();
@@ -25,7 +25,7 @@ export const makeDeleteEpisodeRepository = () => {
 
 export const makeLoadEpisodeByIdRepository = () => {
   class LoadEpisodeByIdRepositoryStub implements LoadEpisodeByIdRepository {
-    async loadById(id: number): Promise<Episode | null> {
+    async loadById(id: string): Promise<Episode | null> {
       return new Promise(resolve => resolve(mockEpisode()));
     }
   }

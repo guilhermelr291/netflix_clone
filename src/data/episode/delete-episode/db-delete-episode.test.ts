@@ -28,7 +28,7 @@ describe('DbDeleteEpisode', () => {
   test('should call DeleteEpisodeRepository with correct id', async () => {
     const { sut, deleteEpisodeRepositoryStub } = makeSut();
     const deleteSpy = vi.spyOn(deleteEpisodeRepositoryStub, 'delete');
-    const id = 1;
+    const id = '1';
     await sut.delete(id);
     expect(deleteSpy).toHaveBeenCalledWith(id);
   });
@@ -40,12 +40,12 @@ describe('DbDeleteEpisode', () => {
       }
     );
 
-    await expect(sut.delete(1)).rejects.toThrow();
+    await expect(sut.delete('1')).rejects.toThrow();
   });
   test('should call LoadEpisodeByIdRepository with correct id', async () => {
     const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
     const loadSpy = vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById');
-    const id = 1;
+    const id = '1';
     await sut.delete(id);
     expect(loadSpy).toHaveBeenCalledWith(id);
   });
@@ -57,7 +57,7 @@ describe('DbDeleteEpisode', () => {
       }
     );
 
-    await expect(sut.delete(1)).rejects.toThrow();
+    await expect(sut.delete('1')).rejects.toThrow();
   });
   test('should throw NotFoundError if LoadEpisodeByIdRepository returns null', async () => {
     const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
@@ -65,7 +65,7 @@ describe('DbDeleteEpisode', () => {
       null
     );
 
-    await expect(sut.delete(1)).rejects.toThrow(
+    await expect(sut.delete('1')).rejects.toThrow(
       new NotFoundError('Episode not found')
     );
   });

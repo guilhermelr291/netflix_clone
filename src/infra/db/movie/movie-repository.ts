@@ -26,12 +26,12 @@ export class MovieRepository
     return movie;
   }
 
-  async deleteById(id: number): Promise<void> {
-    await prisma.movie.delete({ where: { id } });
+  async deleteById(id: string): Promise<void> {
+    await prisma.movie.delete({ where: { id: Number(id) } });
   }
 
-  async loadById(id: number): Promise<Movie | null> {
-    return await prisma.movie.findUnique({ where: { id } });
+  async loadById(id: string): Promise<Movie | null> {
+    return await prisma.movie.findUnique({ where: { id: Number(id) } });
   }
   async loadAll(): Promise<Movie[]> {
     return await prisma.movie.findMany();

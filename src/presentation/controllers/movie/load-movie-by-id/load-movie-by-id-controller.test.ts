@@ -30,7 +30,7 @@ describe('LoadMovieByIdController', () => {
 
     await sut.handle(request);
 
-    expect(loadByIdSpy).toHaveBeenCalledWith(1);
+    expect(loadByIdSpy).toHaveBeenCalledWith('1');
   });
 
   test('should return movie on success', async () => {
@@ -49,7 +49,7 @@ describe('LoadMovieByIdController', () => {
 
     await sut.handle(request);
 
-    expect(loadByIdSpy).toHaveBeenCalledWith(Number(request.id));
+    expect(loadByIdSpy).toHaveBeenCalledWith(request.id);
   });
 
   test('should throw if loadMovieById throws', async () => {

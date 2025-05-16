@@ -14,7 +14,7 @@ export const makeAddEpisodeStub = (): AddEpisode => {
 
 export const makeDeleteEpisodeStub = () => {
   class DeleteEpisodeStub implements DeleteEpisode {
-    async delete(id: number): Promise<void> {}
+    async delete(id: string): Promise<void> {}
   }
 
   return new DeleteEpisodeStub();

@@ -31,7 +31,7 @@ export class EpisodeMapperImpl implements EpisodeMapper {
       thumbnailUrl: domainEpisode.thumbnailUrl,
       durationInMinutes: domainEpisode.durationInMinutes,
       releaseDate: domainEpisode.releaseDate,
-      movieId: domainEpisode.movieId,
+      movieId: Number(domainEpisode.movieId),
     };
   }
 }

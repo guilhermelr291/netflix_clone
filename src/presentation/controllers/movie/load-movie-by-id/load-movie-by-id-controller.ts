@@ -8,7 +8,7 @@ export class LoadMovieByIdController implements Controller {
 
   async handle(request: any): Promise<HttpResponse> {
     try {
-      const id = Number(request.id);
+      const id = request.id;
       const movie = await this.loadMovieById.loadById(id);
 
       return ok(movie);
@@ -22,6 +22,6 @@ export class LoadMovieByIdController implements Controller {
 
 export namespace LoadMovieByIdController {
   export type Params = {
-    id: number;
+    id: string;
   };
 }
