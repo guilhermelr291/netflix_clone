@@ -6,3 +6,4 @@ export * from './movie/load-movie-by-id-controller-factory';
 export * from './movie/load-movies-controller-factory';
 export * from './episode/add-episode-controller-factory';
 export * from './episode/delete-episode-controller-factory';
+export * from './episode/load-episode-by-id-controller-factory';

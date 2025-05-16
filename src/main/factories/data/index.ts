@@ -5,3 +5,4 @@ export * from './movie/db-delete-movie-factory';
 export * from './movie/db-load-movie-by-id-factory';
 export * from './episode/db-add-episode-factory';
 export * from './episode/db-delete-episode.factory';
+export * from './episode/db-load-episode-by-id-factory';
