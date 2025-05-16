@@ -43,4 +43,9 @@ describe('LoadEpisodeByIdController', () => {
     const response = await sut.handle(mockRequest);
     expect(response).toEqual(ok(mockEpisode()));
   });
+  test('should throw if LoadEpisodeById throws', async () => {
+    const { sut, loadEpisodeByIdStub } = makeSut();
+    vi.spyOn(loadEpisodeByIdStub, 'load').mockRejectedValueOnce(new Error());
+    await expect(sut.handle(mockRequest)).rejects.toThrow();
+  });
 });
