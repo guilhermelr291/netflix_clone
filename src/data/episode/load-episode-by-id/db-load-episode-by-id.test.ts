@@ -1,7 +1,9 @@
-import { vi, test, describe, expect } from 'vitest';
+import { vi, test, describe, expect, beforeAll, afterAll } from 'vitest';
 import { DbLoadEpisodeById } from './db-load-episode-by-id';
 import { LoadEpisodeByIdRepository } from '../../protocols/episode/load-episode-by-id-repository';
 import { makeLoadEpisodeByIdRepository as makeLoadEpisodeByIdRepositoryStub } from '../../../__tests__/factories/episode/infra-factory';
+import { mockEpisode } from '../../../__tests__/factories/episode/models-factory';
+import mockDate from 'mockdate';
 
 type SutTypes = {
   sut: DbLoadEpisodeById;
@@ -18,6 +20,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbLoadEpisodeById', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   test('should call LoadEpisodeByIdRepository with correct value', async () => {
     const { sut, loadEpisodeByIdRepositoryStub } = makeSut();
     const loadByIdSpy = vi.spyOn(loadEpisodeByIdRepositoryStub, 'loadById');
@@ -32,5 +41,10 @@ describe('DbLoadEpisodeById', () => {
     );
 
     await expect(sut.load('any_id')).rejects.toThrow();
+  });
+  test('should return episode on success', async () => {
+    const { sut } = makeSut();
+    const episode = await sut.load('any_id');
+    expect(episode).toEqual(mockEpisode());
   });
 });
