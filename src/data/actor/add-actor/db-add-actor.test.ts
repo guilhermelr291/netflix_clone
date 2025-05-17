@@ -3,6 +3,7 @@ import { makeAddActorRepositoryStub } from '../../../__tests__/factories/actor/i
 import { DbAddActor } from './db-add-actor';
 import { AddActorRepository } from '../../protocols/actor/add-actor-repository';
 import { mockAddActorParams } from '../../../__tests__/factories/actor/requested-params-factory';
+import { mockActor } from '../../../__tests__/factories/actor/models-factory';
 
 type SutTypes = {
   sut: DbAddActor;
@@ -30,5 +31,11 @@ describe('DbAddActor', () => {
     const { sut, addActorRepositoryStub } = makeSut();
     vi.spyOn(addActorRepositoryStub, 'add').mockRejectedValueOnce(new Error());
     await expect(sut.add(mockAddActorParams())).rejects.toThrow();
+  });
+  test('should return an actor on success', async () => {
+    const { sut } = makeSut();
+    const data = mockAddActorParams();
+    const actor = await sut.add(data);
+    expect(actor).toEqual(mockActor());
   });
 });
