@@ -43,5 +43,10 @@ describe('Actor Repository', () => {
         data,
       });
     });
+    test('should return an actor on success', async () => {
+      const { sut } = makeSut();
+      const result = await sut.add(mockAddActorParams());
+      expect(result).toEqual(mockActor());
+    });
   });
 });
