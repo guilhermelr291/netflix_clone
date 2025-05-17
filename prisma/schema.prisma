@@ -57,5 +57,5 @@ model Actor {
   id Int @id @default(autoincrement())
   fullName String
   imageUrl String?
-  bio DateTime?
+  bio String?
 }
