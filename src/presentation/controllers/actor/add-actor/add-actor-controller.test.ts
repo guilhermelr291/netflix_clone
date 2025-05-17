@@ -34,4 +34,12 @@ describe('AddActorController', () => {
     const response = await sut.handle(mockAddActorParams());
     expect(response).toEqual(created(mockActor()));
   });
+  test('should throw if AddActor throws', async () => {
+    const { sut, addActorStub } = makeSut();
+    vi.spyOn(addActorStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const promise = sut.handle(mockAddActorParams());
+    await expect(promise).rejects.toThrow();
+  });
 });
