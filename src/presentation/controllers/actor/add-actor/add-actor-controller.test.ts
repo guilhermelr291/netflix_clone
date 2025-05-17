@@ -3,6 +3,8 @@ import { AddActorController } from './add-actor-controller';
 import { AddActor } from '../../../../domain/use-cases/actor/add-actor';
 import { makeAddActorStub } from '../../../../__tests__/factories/actor/domain-factory';
 import { mockAddActorParams } from '../../../../__tests__/factories/actor/requested-params-factory';
+import { created } from '../../../helpers/http-helper';
+import { mockActor } from '../../../../__tests__/factories/actor/models-factory';
 
 type SutTypes = {
   sut: AddActorController;
@@ -25,5 +27,11 @@ describe('AddActorController', () => {
     const request = mockAddActorParams();
     await sut.handle(request);
     expect(addActorSpy).toHaveBeenCalledWith(request);
+  });
+  test('should return 201 and actor on success on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.handle(mockAddActorParams());
+    expect(response).toEqual(created(mockActor()));
   });
 });
