@@ -52,3 +52,10 @@ model Episode {
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])
 }
+
+model Actor {
+  id Int @id @default(autoincrement())
+  fullName String
+  imageUrl String?
+  bio DateTime?
+}
