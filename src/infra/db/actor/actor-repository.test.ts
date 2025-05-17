@@ -9,7 +9,7 @@ import { mockAddActorParams } from '../../../__tests__/factories/actor/requested
 vi.mock('../../../../prisma/db', () => ({
   default: {
     actor: {
-      create: vi.fn().mockResolvedValueOnce({
+      create: vi.fn().mockResolvedValue({
         id: 1,
         fullName: 'any_full_name',
         imageUrl: 'any_image_url',
@@ -47,6 +47,18 @@ describe('Actor Repository', () => {
       const { sut } = makeSut();
       const result = await sut.add(mockAddActorParams());
       expect(result).toEqual(mockActor());
+    });
+    test('should call ActorMapper with correct values', async () => {
+      const { sut, actorMapperStub } = makeSut();
+      const data = mockAddActorParams();
+      const toDomainModelSpy = vi.spyOn(actorMapperStub, 'toDomainModel');
+      await sut.add(data);
+      expect(toDomainModelSpy).toHaveBeenCalledWith({
+        id: 1,
+        fullName: 'any_full_name',
+        imageUrl: 'any_image_url',
+        bio: 'any_bio',
+      });
     });
   });
 });
