@@ -5,5 +5,8 @@ import { AddActorRepository } from '../../protocols/actor/add-actor-repository';
 export class DbAddActor implements AddActor {
   constructor(private readonly addActorRepository: AddActorRepository) {}
 
-  async add(data: AddActor.Params): Promise<Actor> {}
+  async add(data: AddActor.Params): Promise<Actor> {
+    const actor = await this.addActorRepository.add(data);
+    return actor;
+  }
 }
