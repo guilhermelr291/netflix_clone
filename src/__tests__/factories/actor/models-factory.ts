@@ -6,3 +6,10 @@ export const mockActor = (): Actor => ({
   imageUrl: 'any_image_url',
   bio: 'any_bio',
 });
+
+export const mockPrismaActor = () => ({
+  id: 1,
+  fullName: 'any_full_name',
+  imageUrl: 'any_image_url',
+  bio: 'any_bio',
+});
