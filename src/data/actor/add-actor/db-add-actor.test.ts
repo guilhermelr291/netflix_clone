@@ -26,4 +26,9 @@ describe('DbAddActor', () => {
     await sut.add(data);
     expect(addSpy).toHaveBeenCalledWith(data);
   });
+  test('should throw if AddActorRepository throws', async () => {
+    const { sut, addActorRepositoryStub } = makeSut();
+    vi.spyOn(addActorRepositoryStub, 'add').mockRejectedValueOnce(new Error());
+    await expect(sut.add(mockAddActorParams())).rejects.toThrow();
+  });
 });
