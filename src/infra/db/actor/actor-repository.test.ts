@@ -110,5 +110,10 @@ describe('Actor Repository', () => {
 
       expect(result).toBeNull();
     });
+    test('should return an actor on success', async () => {
+      const { sut } = makeSut();
+      const result = await sut.loadById('1');
+      expect(result).toEqual(mockActor());
+    });
   });
 });
