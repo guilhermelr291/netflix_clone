@@ -84,5 +84,10 @@ describe('Actor Repository', () => {
         },
       });
     });
+    test('should throw if prisma throws', async () => {
+      const { sut } = makeSut();
+      vi.spyOn(prisma.actor, 'delete').mockRejectedValueOnce(new Error());
+      await expect(sut.delete('1')).rejects.toThrow();
+    });
   });
 });
