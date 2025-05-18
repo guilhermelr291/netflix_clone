@@ -35,4 +35,12 @@ describe('DeleteActorController', () => {
     const response = await sut.handle(mockRequest);
     expect(response).toEqual(ok({ message: 'Actor deleted successfully' }));
   });
+  test('should throw if DeleteActor throws', async () => {
+    const { sut, deleteActorStub } = makeSut();
+    vi.spyOn(deleteActorStub, 'delete').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.handle(mockRequest)).rejects.toThrow();
+  });
 });
