@@ -126,5 +126,10 @@ describe('Actor Repository', () => {
         bio: 'any_bio',
       });
     });
+    test('should throw if prisma throws', async () => {
+      const { sut } = makeSut();
+      vi.mocked(prisma.actor.findUnique).mockRejectedValueOnce(new Error());
+      await expect(sut.loadById('1')).rejects.toThrow();
+    });
   });
 });
