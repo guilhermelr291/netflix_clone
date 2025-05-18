@@ -15,6 +15,13 @@ vi.mock('../../../../prisma/db', () => ({
         imageUrl: 'any_image_url',
         bio: 'any_bio',
       }),
+      delete: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue({
+        id: 1,
+        fullName: 'any_full_name',
+        imageUrl: 'any_image_url',
+        bio: 'any_bio',
+      }),
     },
   },
 }));
@@ -64,6 +71,18 @@ describe('Actor Repository', () => {
       const { sut } = makeSut();
       vi.spyOn(prisma.actor, 'create').mockRejectedValueOnce(new Error());
       await expect(sut.add(mockAddActorParams())).rejects.toThrow();
+    });
+  });
+  describe('delete()', () => {
+    test('should call prisma with correct values', async () => {
+      const { sut } = makeSut();
+      const id = '1';
+      await sut.delete(id);
+      expect(prisma.actor.delete).toHaveBeenCalledWith({
+        where: {
+          id: Number(id),
+        },
+      });
     });
   });
 });
