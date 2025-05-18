@@ -90,4 +90,17 @@ describe('Actor Repository', () => {
       await expect(sut.delete('1')).rejects.toThrow();
     });
   });
+
+  describe('loadById()', () => {
+    test('should call prisma with correct values', async () => {
+      const { sut } = makeSut();
+      const id = '1';
+      await sut.loadById(id);
+      expect(prisma.actor.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: Number(id),
+        },
+      });
+    });
+  });
 });
