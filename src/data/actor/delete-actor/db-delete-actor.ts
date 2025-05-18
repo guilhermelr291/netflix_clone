@@ -9,7 +9,7 @@ export class DbDeleteActor implements DeleteActor {
     private readonly loadActorByIdRepository: LoadActorByIdRepository
   ) {}
   async delete(id: string): Promise<void> {
-    const actor = await this.loadActorByIdRepository.loadById('any_id');
+    const actor = await this.loadActorByIdRepository.loadById(id);
 
     if (!actor) {
       throw new NotFoundError('Actor not found');
