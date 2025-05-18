@@ -115,5 +115,16 @@ describe('Actor Repository', () => {
       const result = await sut.loadById('1');
       expect(result).toEqual(mockActor());
     });
+    test('should call ActorMapper with correct values', async () => {
+      const { sut, actorMapperStub } = makeSut();
+      const toDomainModelSpy = vi.spyOn(actorMapperStub, 'toDomainModel');
+      await sut.loadById('1');
+      expect(toDomainModelSpy).toHaveBeenCalledWith({
+        id: 1,
+        fullName: 'any_full_name',
+        imageUrl: 'any_image_url',
+        bio: 'any_bio',
+      });
+    });
   });
 });
