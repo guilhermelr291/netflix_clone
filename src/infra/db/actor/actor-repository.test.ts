@@ -102,5 +102,13 @@ describe('Actor Repository', () => {
         },
       });
     });
+    test('should return null if actor is not found', async () => {
+      const { sut } = makeSut();
+      vi.mocked(prisma.actor.findUnique).mockResolvedValueOnce(null);
+
+      const result = await sut.loadById('1');
+
+      expect(result).toBeNull();
+    });
   });
 });
