@@ -1,3 +1,3 @@
 export interface DeleteActor {
-  delete(): Promise<void>;
+  delete(id: string): Promise<void>;
 }
