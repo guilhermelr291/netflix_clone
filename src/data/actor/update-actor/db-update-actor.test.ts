@@ -7,6 +7,7 @@ import {
 } from '../../../__tests__/factories/actor/infra-factory';
 import { LoadActorByIdRepository } from '../../protocols/actor/load-actor-by-id-repository';
 import { mockUpdateActorParams } from '../../../__tests__/factories/actor/requested-params-factory';
+import { NotFoundError } from '../../../shared/errors';
 
 type SutTypes = {
   sut: DbUpdateActor;
@@ -48,5 +49,15 @@ describe('DbUpdateActor ', () => {
     await expect(
       sut.update('any_id', mockUpdateActorParams())
     ).rejects.toThrow();
+  });
+  test('should throw NotFoundError if LoadActorByIdRepository returns null', async () => {
+    const { sut, loadActorByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadActorByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+      null
+    );
+
+    await expect(sut.update('any_id', mockUpdateActorParams())).rejects.toThrow(
+      new NotFoundError('Actor not found')
+    );
   });
 });
