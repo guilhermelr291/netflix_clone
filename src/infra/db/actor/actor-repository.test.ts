@@ -171,5 +171,10 @@ describe('Actor Repository', () => {
         bio: 'any_bio',
       });
     });
+    test('should throw if prisma throws', async () => {
+      const { sut } = makeSut();
+      vi.mocked(prisma.actor.update).mockRejectedValueOnce(new Error());
+      await expect(sut.update('1', mockUpdateActorParams())).rejects.toThrow();
+    });
   });
 });
