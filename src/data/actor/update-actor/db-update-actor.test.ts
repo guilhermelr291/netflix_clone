@@ -60,4 +60,13 @@ describe('DbUpdateActor ', () => {
       new NotFoundError('Actor not found')
     );
   });
+  test('should call UpdateActorRepository with correct values', async () => {
+    const { sut, updateActorRepositoryStub } = makeSut();
+    const updateSpy = vi.spyOn(updateActorRepositoryStub, 'update');
+
+    const data = mockUpdateActorParams();
+    await sut.update('any_id', data);
+
+    expect(updateSpy).toHaveBeenCalledWith('any_id', data);
+  });
 });
