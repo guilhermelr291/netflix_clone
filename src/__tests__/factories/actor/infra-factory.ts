@@ -5,6 +5,8 @@ import { mockActor, mockPrismaActor } from './models-factory';
 import { ActorMapper } from '../../../infra/db/protocols/actor-mapper';
 import { LoadActorByIdRepository } from '../../../data/protocols/actor/load-actor-by-id-repository';
 import { DeleteActorRepository } from '../../../data/protocols/actor/delete-actor-repository';
+import { UpdateActor } from '../../../domain/use-cases/actor/update-actor';
+import { UpdateActorRepository } from '../../../data/protocols/actor/update-actor-repository';
 
 export const makeAddActorRepositoryStub = (): AddActorRepository => {
   class AddActorRepositoryStub implements AddActorRepository {
@@ -43,4 +45,16 @@ export const makeDeleteActorRepositoryStub = () => {
   }
 
   return new DeleteActorRepositoryStub();
+};
+
+export const makeUpdateActorRepository = () => {
+  class UpdateActorRepositoryStub implements UpdateActorRepository {
+    async update(
+      actorId: string,
+      actorData: UpdateActor.Params
+    ): Promise<Actor> {
+      return new Promise(resolve => resolve({ ...mockActor(), id: actorId }));
+    }
+  }
+  return new UpdateActorRepositoryStub();
 };
