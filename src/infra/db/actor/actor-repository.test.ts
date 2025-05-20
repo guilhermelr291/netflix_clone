@@ -4,7 +4,10 @@ import { ActorRepository } from './actor-repository';
 import { makeActorMapperStub } from '../../../__tests__/factories/actor/infra-factory';
 import { mockActor } from '../../../__tests__/factories/actor/models-factory';
 import prisma from '../../../../prisma/db';
-import { mockAddActorParams } from '../../../__tests__/factories/actor/requested-params-factory';
+import {
+  mockAddActorParams,
+  mockUpdateActorParams,
+} from '../../../__tests__/factories/actor/requested-params-factory';
 
 vi.mock('../../../../prisma/db', () => ({
   default: {
@@ -17,6 +20,12 @@ vi.mock('../../../../prisma/db', () => ({
       }),
       delete: vi.fn(),
       findUnique: vi.fn().mockResolvedValue({
+        id: 1,
+        fullName: 'any_full_name',
+        imageUrl: 'any_image_url',
+        bio: 'any_bio',
+      }),
+      update: vi.fn().mockResolvedValue({
         id: 1,
         fullName: 'any_full_name',
         imageUrl: 'any_image_url',
@@ -130,6 +139,20 @@ describe('Actor Repository', () => {
       const { sut } = makeSut();
       vi.mocked(prisma.actor.findUnique).mockRejectedValueOnce(new Error());
       await expect(sut.loadById('1')).rejects.toThrow();
+    });
+  });
+  describe('update()', () => {
+    test('should call prisma with correct values', async () => {
+      const { sut } = makeSut();
+      const id = '1';
+      const data = mockUpdateActorParams();
+      await sut.update(id, data);
+      expect(prisma.actor.update).toHaveBeenCalledWith({
+        where: {
+          id: Number(id),
+        },
+        data,
+      });
     });
   });
 });
