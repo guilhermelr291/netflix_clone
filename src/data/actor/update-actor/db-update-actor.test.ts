@@ -8,6 +8,7 @@ import {
 import { LoadActorByIdRepository } from '../../protocols/actor/load-actor-by-id-repository';
 import { mockUpdateActorParams } from '../../../__tests__/factories/actor/requested-params-factory';
 import { NotFoundError } from '../../../shared/errors';
+import { mockActor } from '../../../__tests__/factories/actor/models-factory';
 
 type SutTypes = {
   sut: DbUpdateActor;
@@ -78,5 +79,15 @@ describe('DbUpdateActor ', () => {
     await expect(
       sut.update('any_id', mockUpdateActorParams())
     ).rejects.toThrow();
+  });
+  test('should return an actor on success', async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.update('any_id', mockUpdateActorParams());
+
+    expect(result).toEqual({
+      ...mockActor(),
+      id: 'any_id',
+    });
   });
 });
