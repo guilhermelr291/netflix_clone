@@ -69,4 +69,14 @@ describe('DbUpdateActor ', () => {
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', data);
   });
+  test('should throw if UpdateActorRepository throws', async () => {
+    const { sut, updateActorRepositoryStub } = makeSut();
+    vi.spyOn(updateActorRepositoryStub, 'update').mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(
+      sut.update('any_id', mockUpdateActorParams())
+    ).rejects.toThrow();
+  });
 });
