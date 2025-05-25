@@ -3,6 +3,7 @@ import { makeLoadActorByIdRepository } from '../../../__tests__/factories/actor/
 import { DbLoadActorById } from './db-load-actor-by-id';
 import { LoadActorByIdRepository } from '../../protocols/actor/load-actor-by-id-repository';
 import { mockActor } from '../../../__tests__/factories/actor/models-factory';
+import { NotFoundError } from '../../../shared/errors';
 
 type SutTypes = {
   sut: DbLoadActorById;
@@ -43,5 +44,15 @@ describe('DbLoadActorById', () => {
     );
 
     await expect(sut.loadById('any_id')).rejects.toThrow();
+  });
+  test('should throw NotFoundError if LoadActorByIdRepository returns null', async () => {
+    const { sut, loadActorByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadActorByIdRepositoryStub, 'loadById').mockResolvedValueOnce(
+      null
+    );
+
+    await expect(sut.loadById('any_id')).rejects.toThrow(
+      new NotFoundError('Actor not found')
+    );
   });
 });
