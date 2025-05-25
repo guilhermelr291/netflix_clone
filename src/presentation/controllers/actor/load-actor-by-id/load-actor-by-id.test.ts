@@ -2,6 +2,8 @@ import { vi, test, describe, expect } from 'vitest';
 import { LoadActorById } from '../../../../domain/use-cases/actor/load-actor-by-id';
 import { LoadActorByIdController } from './load-actor-by-id-controller';
 import { makeLoadActorByIdStub } from '../../../../__tests__/factories/actor/domain-factory';
+import { ok } from '../../../helpers/http-helper';
+import { mockActor } from '../../../../__tests__/factories/actor/models-factory';
 
 type SutTypes = {
   sut: LoadActorByIdController;
@@ -29,5 +31,11 @@ describe('LoadActorByIdController', () => {
     await sut.handle(mockRequest);
 
     expect(loadByIdSpy).toHaveBeenCalledWith(mockRequest.id);
+  });
+  test('should return 200 and actor on success', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(mockRequest);
+    expect(httpResponse).toEqual(ok(mockActor()));
   });
 });
