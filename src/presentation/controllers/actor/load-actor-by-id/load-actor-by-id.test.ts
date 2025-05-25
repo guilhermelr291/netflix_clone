@@ -38,4 +38,12 @@ describe('LoadActorByIdController', () => {
     const httpResponse = await sut.handle(mockRequest);
     expect(httpResponse).toEqual(ok(mockActor()));
   });
+  test('should throw if LoadActorById throws', async () => {
+    const { sut, loadActorByIdStub } = makeSut();
+    vi.spyOn(loadActorByIdStub, 'loadById').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await expect(sut.handle(mockRequest)).rejects.toThrow();
+  });
 });

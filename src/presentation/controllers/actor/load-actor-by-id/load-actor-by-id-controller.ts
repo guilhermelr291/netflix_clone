@@ -7,11 +7,16 @@ export class LoadActorByIdController implements Controller {
   constructor(private readonly loadActorById: LoadActorById) {}
 
   async handle(request: LoadActorByIdController.Params): Promise<HttpResponse> {
-    const { id } = request;
+    try {
+      const { id } = request;
 
-    const actor = await this.loadActorById.loadById(id);
+      const actor = await this.loadActorById.loadById(id);
 
-    return ok(actor);
+      return ok(actor);
+    } catch (error) {
+      console.error('Error loading actor by ID:', error);
+      throw error;
+    }
   }
 }
 
