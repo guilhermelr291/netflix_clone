@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { adminAuth } from '../middlewares';
+import { adminAuth, auth } from '../middlewares';
 import { adaptMiddleware, adaptRoute } from '../adapters';
 
 import {
@@ -9,6 +9,7 @@ import {
   makeUpdateActorController,
   makeUpdateActorDataValidationMiddleware,
 } from '../factories';
+import { makeLoadActorByIdController } from '../factories/presentation/actor/load-actor-by-id-controller-factory';
 
 export default (router: Router): void => {
   router.post(
@@ -17,6 +18,8 @@ export default (router: Router): void => {
     adaptMiddleware(makeAddActorDataValidationMiddleware()),
     adaptRoute(makeAddActorController())
   );
+  router.get('/actors/:id', auth, adaptRoute(makeLoadActorByIdController()));
+
   router.patch(
     '/actors/:id',
     adminAuth,
