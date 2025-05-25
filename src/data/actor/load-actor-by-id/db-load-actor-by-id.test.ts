@@ -34,4 +34,14 @@ describe('DbLoadActorById', () => {
 
     expect(actor).toEqual(mockActor());
   });
+  test('should throw if LoadActorByIdRepository throws', async () => {
+    const { sut, loadActorByIdRepositoryStub } = makeSut();
+    vi.spyOn(loadActorByIdRepositoryStub, 'loadById').mockImplementationOnce(
+      () => {
+        throw new Error();
+      }
+    );
+
+    await expect(sut.loadById('any_id')).rejects.toThrow();
+  });
 });
